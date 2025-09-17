@@ -112,25 +112,21 @@ interface TypingTextProps {
 
 function TypingText({ text, isTyping, speed = 20 }: TypingTextProps) {
   const [displayedText, setDisplayedText] = useState("");
-  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
     if (!isTyping) {
       setDisplayedText(text);
-      setIsComplete(true);
       return;
     }
 
     if (text.length === 0) {
       setDisplayedText("");
-      setIsComplete(false);
       return;
     }
 
     // Only reset if we're starting a new message
     if (displayedText.length === 0 || !text.startsWith(displayedText)) {
       setDisplayedText("");
-      setIsComplete(false);
     }
 
     // Calculate the new text to display
@@ -139,14 +135,11 @@ function TypingText({ text, isTyping, speed = 20 }: TypingTextProps) {
     if (newText !== displayedText) {
       const timeout = setTimeout(() => {
         setDisplayedText(newText);
-        if (newText.length === text.length) {
-          setIsComplete(true);
-        }
       }, speed);
       
       return () => clearTimeout(timeout);
     }
-  }, [text, isTyping, speed]);
+  }, [text, isTyping, speed, displayedText]);
 
   return <Markdown>{displayedText}</Markdown>;
 }
