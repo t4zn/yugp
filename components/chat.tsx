@@ -26,23 +26,48 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="h-dvh flex flex-col justify-center w-full stretch">
+    <div className="h-dvh flex flex-col justify-between w-full">
       <Header />
-      {messages.length === 0 ? (
-        <div className="max-w-xl mx-auto w-full">
-          <ProjectOverview />
+      <div className="flex-1">
+        {messages.length === 0 ? (
+          <div className="max-w-3xl mx-auto w-full px-6">
+            <ProjectOverview />
+          </div>
+        ) : (
+          <Messages messages={messages} isLoading={isLoading} status={status} />
+        )}
+      </div>
+
+      {messages.length === 0 && (
+        <div className="w-full max-w-3xl mx-auto px-6 mb-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              "What are the advantages of using Next.js?",
+              "Write code to demonstrate Dijkstra's algorithm",
+              "Help me write an essay about Silicon Valley",
+              "What is the weather in San Francisco?",
+            ].map((text) => (
+              <button
+                key={text}
+                type="button"
+                onClick={() => setInput(text)}
+                className="w-full rounded-full border border-zinc-800/80 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900/60 px-4 py-2 text-sm transition-colors text-left"
+              >
+                {text}
+              </button>
+            ))}
+          </div>
         </div>
-      ) : (
-        <Messages messages={messages} isLoading={isLoading} status={status} />
       )}
-      <div className="relative pb-8 w-full max-w-xl mx-auto px-4 sm:px-0">
+
+      <div className="relative pb-6 w-full max-w-3xl mx-auto px-6">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             sendMessage({ text: input }, { body: { selectedModel } });
             setInput("");
           }}
-          className="relative bg-white dark:bg-black rounded-lg"
+          className="relative"
         >
           <Textarea
             selectedModel={selectedModel}
