@@ -17,6 +17,7 @@ import {
   StopCircle,
 } from "lucide-react";
 import { SpinnerIcon } from "./icons";
+import { PulsingDot } from "./ui/pulsing-dot";
 
 interface ReasoningMessagePartProps {
   part: ReasoningUIPart;
@@ -103,6 +104,38 @@ export function ReasoningMessagePart({
   );
 }
 
+interface TypingTextProps {
+  text: string;
+  isTyping: boolean;
+  speed?: number;
+}
+
+function TypingText({ text, isTyping, speed = 20 }: TypingTextProps) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    if (!isTyping) {
+      setDisplayedText(text);
+      return;
+    }
+
+    setDisplayedText("");
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayedText(text.substring(0, i + 1));
+        i++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, speed);
+
+    return () => clearInterval(typingInterval);
+  }, [text, isTyping, speed]);
+
+  return <Markdown>{displayedText}</Markdown>;
+}
+
 const PurePreviewMessage = ({
   message,
   isLatestMessage,
@@ -153,7 +186,22 @@ const PurePreviewMessage = ({
                             message.role === "user",
                         })}
                       >
-                        <Markdown>{part.text}</Markdown>
+                        {message.role === "assistant" && isLatestMessage && status === "streaming" ? (
+                          <>
+                            <div className="flex gap-2 items-center mb-2">
+                              <PulsingDot />
+                              <PulsingDot />
+                              <PulsingDot />
+                            </div>
+                            <TypingText 
+                              text={part.text} 
+                              isTyping={true} 
+                              speed={10} 
+                            />
+                          </>
+                        ) : (
+                          <Markdown>{part.text}</Markdown>
+                        )}
                       </div>
                     </motion.div>
                   );
