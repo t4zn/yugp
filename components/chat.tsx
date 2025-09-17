@@ -48,9 +48,8 @@ export default function Chat() {
           <BorderBeam 
             size={100}
             duration={10}
-            colorFrom="#7400ff"
-            colorTo="#9b41ff"
-            borderThickness={1}
+            colorFrom="#000000"
+            colorTo="#C0C0C0"
             glowIntensity={0.5}
           />
           <Textarea
