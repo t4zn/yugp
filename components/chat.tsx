@@ -8,7 +8,6 @@ import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
 import { Header } from "./header";
 import { toast } from "sonner";
-import { BorderBeam } from "./ui/border-beam";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -45,13 +44,6 @@ export default function Chat() {
           }}
           className="relative bg-white dark:bg-black rounded-lg"
         >
-          <BorderBeam 
-            size={100}
-            duration={10}
-            colorFrom="#000000"
-            colorTo="#C0C0C0"
-            glowIntensity={0.5}
-          />
           <Textarea
             selectedModel={selectedModel}
             setSelectedModel={setSelectedModel}
