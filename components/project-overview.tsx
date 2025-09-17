@@ -1,10 +1,8 @@
 export const ProjectOverview = () => {
   return (
-    <div className="flex flex-col items-center justify-end">
-      <h1 className="text-3xl font-semibold mb-4">Taizun AI</h1>
-      <p className="text-center">
-        Advanced AI assistant powered by Taizun
-      </p>
+    <div className="flex flex-col items-start pt-28 pb-8">
+      <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-100">Hello there!</h1>
+      <p className="mt-3 text-lg text-zinc-400">How can I help you today?</p>
     </div>
   );
 };
