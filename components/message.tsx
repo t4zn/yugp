@@ -17,7 +17,7 @@ import {
   StopCircle,
 } from "lucide-react";
 import { SpinnerIcon } from "./icons";
-import { PulsingDot } from "./ui/pulsing-dot";
+import { PulsingDot } from "@/components/ui/pulsing-dot";
 
 interface ReasoningMessagePartProps {
   part: ReasoningUIPart;
@@ -112,25 +112,40 @@ interface TypingTextProps {
 
 function TypingText({ text, isTyping, speed = 20 }: TypingTextProps) {
   const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
     if (!isTyping) {
       setDisplayedText(text);
+      setIsComplete(true);
       return;
     }
 
-    setDisplayedText("");
-    let i = 0;
-    const typingInterval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText(text.substring(0, i + 1));
-        i++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, speed);
+    if (text.length === 0) {
+      setDisplayedText("");
+      setIsComplete(false);
+      return;
+    }
 
-    return () => clearInterval(typingInterval);
+    // Only reset if we're starting a new message
+    if (displayedText.length === 0 || !text.startsWith(displayedText)) {
+      setDisplayedText("");
+      setIsComplete(false);
+    }
+
+    // Calculate the new text to display
+    const newText = text.substring(0, displayedText.length + 1);
+    
+    if (newText !== displayedText) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(newText);
+        if (newText.length === text.length) {
+          setIsComplete(true);
+        }
+      }, speed);
+      
+      return () => clearTimeout(timeout);
+    }
   }, [text, isTyping, speed]);
 
   return <Markdown>{displayedText}</Markdown>;
@@ -188,14 +203,16 @@ const PurePreviewMessage = ({
                       >
                         {message.role === "assistant" && isLatestMessage && status === "streaming" ? (
                           <>
-                            <div className="flex gap-2 items-center mb-2">
-                              <PulsingDot />
-                              <PulsingDot />
-                              <PulsingDot />
-                            </div>
+                            {!part.text && (
+                              <div className="flex gap-2 items-center mb-2">
+                                <PulsingDot />
+                                <PulsingDot />
+                                <PulsingDot />
+                              </div>
+                            )}
                             <TypingText 
                               text={part.text} 
-                              isTyping={true} 
+                              isTyping={status === "streaming"} 
                               speed={10} 
                             />
                           </>
