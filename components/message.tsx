@@ -66,9 +66,9 @@ export function ReasoningMessagePart({
           <div className="font-medium text-sm">Reasoned for a few seconds</div>
           <button
             className={cn(
-              "cursor-pointer rounded-full dark:hover:bg-zinc-800 hover:bg-zinc-200",
+              "cursor-pointer rounded-full hover:bg-zinc-800",
               {
-                "dark:bg-zinc-800 bg-zinc-200": isExpanded,
+                "bg-zinc-800": isExpanded,
               },
             )}
             onClick={() => {
@@ -88,7 +88,7 @@ export function ReasoningMessagePart({
         {isExpanded && (
           <motion.div
             key="reasoning"
-            className="text-sm dark:text-zinc-400 text-zinc-600 flex flex-col gap-4 border-l pl-3 dark:border-zinc-800"
+            className="text-sm text-zinc-400 flex flex-col gap-4 border-l pl-3 border-zinc-800"
             initial="collapsed"
             animate="expanded"
             exit="collapsed"
@@ -166,16 +166,16 @@ const PurePreviewMessage = ({
                       initial={{ y: 5, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       key={`message-${message.id}-part-${i}`}
-                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-zinc-50 dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800"
+                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-zinc-900 rounded-md border border-zinc-800"
                     >
                       <div className="flex-1 flex items-center justify-center">
-                        <div className="flex items-center justify-center w-8 h-8 bg-zinc-50 dark:bg-zinc-800 rounded-full">
+                        <div className="flex items-center justify-center w-8 h-8 bg-zinc-800 rounded-full">
                           <PocketKnife className="h-4 w-4" />
                         </div>
                         <div className="flex-1">
                           <div className="font-medium flex items-baseline gap-2">
                             {state === "input-streaming" ? "Calling" : "Called"}{" "}
-                            <span className="font-mono bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-md">
+                            <span className="font-mono bg-zinc-800 px-2 py-1 rounded-md">
                               {getToolName(part)}
                             </span>
                           </div>
