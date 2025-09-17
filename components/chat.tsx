@@ -8,6 +8,7 @@ import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
 import { Header } from "./header";
 import { toast } from "sonner";
+import { BorderBeam } from "./ui/border-beam";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -35,24 +36,34 @@ export default function Chat() {
       ) : (
         <Messages messages={messages} isLoading={isLoading} status={status} />
       )}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          sendMessage({ text: input }, { body: { selectedModel } });
-          setInput("");
-        }}
-        className="pb-8 bg-white dark:bg-black w-full max-w-xl mx-auto px-4 sm:px-0"
-      >
-        <Textarea
-          selectedModel={selectedModel}
-          setSelectedModel={setSelectedModel}
-          handleInputChange={(e) => setInput(e.currentTarget.value)}
-          input={input}
-          isLoading={isLoading}
-          status={status}
-          stop={stop}
-        />
-      </form>
+      <div className="relative pb-8 w-full max-w-xl mx-auto px-4 sm:px-0">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage({ text: input }, { body: { selectedModel } });
+            setInput("");
+          }}
+          className="relative bg-white dark:bg-black rounded-lg"
+        >
+          <BorderBeam 
+            size={100}
+            duration={10}
+            colorFrom="#7400ff"
+            colorTo="#9b41ff"
+            borderThickness={1}
+            glowIntensity={0.5}
+          />
+          <Textarea
+            selectedModel={selectedModel}
+            setSelectedModel={setSelectedModel}
+            handleInputChange={(e) => setInput(e.currentTarget.value)}
+            input={input}
+            isLoading={isLoading}
+            status={status}
+            stop={stop}
+          />
+        </form>
+      </div>
     </div>
   );
-}
+};
