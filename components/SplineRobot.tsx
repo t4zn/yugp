@@ -27,8 +27,8 @@ export default function SplineRobot({ className = '' }: SplineRobotProps) {
         console.log('Robot scene loaded successfully');
         // Enable mouse interactions
         try {
-          (app as any).enableMouseInteraction();
-        } catch (e) {
+          (app as Application & { enableMouseInteraction?: () => void }).enableMouseInteraction?.();
+        } catch (_) {
           console.log('Mouse interaction method not available');
         }
       })
