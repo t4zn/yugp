@@ -170,7 +170,7 @@ const PurePreviewMessage = ({
           )}
         >
           {message.role === "assistant" && (
-            <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
+            <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-white/30 bg-white/10 backdrop-blur-sm">
               <div className="">
                 <SparklesIcon size={14} />
               </div>
@@ -190,7 +190,7 @@ const PurePreviewMessage = ({
                     >
                       <div
                         className={cn("flex flex-col gap-4", {
-                          "bg-secondary text-secondary-foreground px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl":
+                          "bg-white/20 backdrop-blur-sm text-white px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl shadow-lg":
                             message.role === "user",
                         })}
                       >
@@ -224,16 +224,16 @@ const PurePreviewMessage = ({
                       initial={{ y: 5, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       key={`message-${message.id}-part-${i}`}
-                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-zinc-900 rounded-md border border-zinc-800"
+                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-black/40 backdrop-blur-sm rounded-md border border-white/20 text-white shadow-lg"
                     >
                       <div className="flex-1 flex items-center justify-center">
-                        <div className="flex items-center justify-center w-8 h-8 bg-zinc-800 rounded-full">
+                        <div className="flex items-center justify-center w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full">
                           <PocketKnife className="h-4 w-4" />
                         </div>
                         <div className="flex-1">
                           <div className="font-medium flex items-baseline gap-2">
                             {state === "input-streaming" ? "Calling" : "Called"}{" "}
-                            <span className="font-mono bg-zinc-800 px-2 py-1 rounded-md">
+                            <span className="font-mono bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md text-white">
                               {getToolName(part)}
                             </span>
                           </div>

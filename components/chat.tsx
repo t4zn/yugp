@@ -26,7 +26,7 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="h-dvh flex flex-col justify-between w-full">
+    <div className="h-screen flex flex-col justify-between w-full p-6">
       <Header />
       <div className="flex-1">
         {messages.length === 0 ? (
@@ -51,7 +51,7 @@ export default function Chat() {
                 key={text}
                 type="button"
                 onClick={() => setInput(text)}
-                className="w-full rounded-full border border-gray-300 text-gray-700 hover:text-gray-900 hover:bg-gray-100 px-4 py-2 text-sm transition-colors text-left"
+                className="w-full rounded-full border border-gray-300/80 text-gray-700 hover:text-gray-900 hover:bg-white/20 px-4 py-2 text-sm transition-colors text-left backdrop-blur-sm"
               >
                 {text}
               </button>

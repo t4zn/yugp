@@ -15,14 +15,14 @@ const SplineRobot = dynamic(() => import('@/components/SplineRobot'), {
 
 export default function Page() {
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-white">
-      {/* Robot Animation Section */}
-      <div className="w-full md:w-1/2 bg-white">
-        <SplineRobot className="" />
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Spline Background - Full Screen */}
+      <div className="absolute inset-0">
+        <SplineRobot className="w-full h-full" />
       </div>
 
-      {/* Chat Section */}
-      <div className="w-full md:w-1/2 bg-white">
+      {/* Chat Overlay */}
+      <div className="absolute inset-0 z-10">
         <Chat />
       </div>
     </div>
