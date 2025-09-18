@@ -65,9 +65,8 @@ export function useSplineMouseInteraction(
     if (!canvas) return;
 
     const forwardMouseEvent = (originalEvent: MouseEvent, eventType: string) => {
-      const rect = canvas.getBoundingClientRect();
-      // Note: x and y coordinates calculated but not used in current implementation
-      // These could be used for custom event processing if needed
+      // Note: Canvas coordinates could be calculated if needed for custom event processing:
+      // const rect = canvas.getBoundingClientRect();
       // const x = originalEvent.clientX - rect.left;
       // const y = originalEvent.clientY - rect.top;
 
