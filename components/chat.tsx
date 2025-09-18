@@ -26,20 +26,24 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="h-screen flex flex-col justify-between w-full p-6 pointer-events-auto">
-      <Header />
-      <div className="flex-1">
+    <div className="h-screen flex flex-col justify-between w-full p-6 pointer-events-none">
+      <div className="pointer-events-auto">
+        <Header />
+      </div>
+      <div className="flex-1 pointer-events-none">
         {messages.length === 0 ? (
-          <div className="max-w-3xl mx-auto w-full px-6">
+          <div className="max-w-3xl mx-auto w-full px-6 pointer-events-none">
             <ProjectOverview />
           </div>
         ) : (
-          <Messages messages={messages} isLoading={isLoading} status={status} />
+          <div className="pointer-events-auto">
+            <Messages messages={messages} isLoading={isLoading} status={status} />
+          </div>
         )}
       </div>
 
       {messages.length === 0 && (
-        <div className="hidden md:block w-full max-w-3xl mx-auto px-6 mb-3">
+        <div className="hidden md:block w-full max-w-3xl mx-auto px-6 mb-3 pointer-events-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               "What are the advantages of using Next.js?",
@@ -60,7 +64,7 @@ export default function Chat() {
         </div>
       )}
 
-      <div className="relative pb-6 w-full max-w-3xl mx-auto px-6">
+      <div className="relative pb-6 w-full max-w-3xl mx-auto px-6 pointer-events-auto">
         <form
           onSubmit={(e) => {
             e.preventDefault();

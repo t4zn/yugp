@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Application } from '@splinetool/runtime';
+import { useSplineMouseInteraction } from '@/lib/hooks/use-spline-mouse-interaction';
 
 interface SplineRobotProps {
   className?: string;
@@ -11,6 +12,10 @@ export default function SplineRobot({ className = '' }: SplineRobotProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appRef = useRef<Application | null>(null);
   const hasInitializedRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Use custom hook for mouse interaction
+  useSplineMouseInteraction(canvasRef, appRef);
 
   useEffect(() => {
     if (!canvasRef.current || hasInitializedRef.current) return;
@@ -25,12 +30,7 @@ export default function SplineRobot({ className = '' }: SplineRobotProps) {
     app.load('/nexbot_robot_character_concept.spline')
       .then(() => {
         console.log('Robot scene loaded successfully');
-        // Enable mouse interactions
-        try {
-          (app as Application & { enableMouseInteraction?: () => void }).enableMouseInteraction?.();
-        } catch {
-          console.log('Mouse interaction method not available');
-        }
+        console.log('Mouse interaction will be set up by custom hook');
       })
       .catch((error: unknown) => {
         console.error('Failed to load robot scene:', error);
@@ -40,16 +40,29 @@ export default function SplineRobot({ className = '' }: SplineRobotProps) {
     return () => {
       if (appRef.current) {
         appRef.current.dispose();
+        appRef.current = null;
       }
     };
   }, []);
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
+    <div 
+      ref={containerRef}
+      className={`relative w-full h-full ${className}`}
+      style={{ 
+        pointerEvents: 'auto',
+        zIndex: 0
+      }}
+    >
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        style={{ background: 'transparent' }}
+        style={{ 
+          background: 'transparent',
+          pointerEvents: 'auto',
+          cursor: 'auto',
+          touchAction: 'auto'
+        }}
       />
     </div>
   );

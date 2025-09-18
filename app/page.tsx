@@ -1,5 +1,6 @@
 import Chat from "@/components/chat";
 import dynamic from 'next/dynamic';
+import { InteractionLayer } from '@/components/InteractionLayer';
 
 // Dynamically import to avoid SSR issues
 const SplineRobot = dynamic(() => import('@/components/SplineRobot'), {
@@ -16,15 +17,15 @@ const SplineRobot = dynamic(() => import('@/components/SplineRobot'), {
 export default function Page() {
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      {/* Spline Background - Full Screen */}
-      <div className="absolute inset-0">
+      {/* Spline Background - Full Screen with mouse events enabled */}
+      <div className="absolute inset-0 z-0">
         <SplineRobot className="w-full h-full" />
       </div>
 
-      {/* Chat Overlay */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
+      {/* Chat Overlay with InteractionLayer - Selective pointer events */}
+      <InteractionLayer>
         <Chat />
-      </div>
+      </InteractionLayer>
     </div>
   );
 }
