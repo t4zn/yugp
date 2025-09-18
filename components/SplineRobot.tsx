@@ -25,6 +25,12 @@ export default function SplineRobot({ className = '' }: SplineRobotProps) {
     app.load('/nexbot_robot_character_concept.spline')
       .then(() => {
         console.log('Robot scene loaded successfully');
+        // Enable mouse interactions
+        try {
+          (app as any).enableMouseInteraction();
+        } catch (e) {
+          console.log('Mouse interaction method not available');
+        }
       })
       .catch((error: unknown) => {
         console.error('Failed to load robot scene:', error);

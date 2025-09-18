@@ -22,7 +22,7 @@ export default function Page() {
       </div>
 
       {/* Chat Overlay */}
-      <div className="absolute inset-0 z-10">
+      <div className="absolute inset-0 z-10 pointer-events-none">
         <Chat />
       </div>
     </div>

@@ -26,7 +26,7 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="h-screen flex flex-col justify-between w-full p-6">
+    <div className="h-screen flex flex-col justify-between w-full p-6 pointer-events-auto">
       <Header />
       <div className="flex-1">
         {messages.length === 0 ? (
@@ -39,7 +39,7 @@ export default function Chat() {
       </div>
 
       {messages.length === 0 && (
-        <div className="w-full max-w-3xl mx-auto px-6 mb-3">
+        <div className="hidden md:block w-full max-w-3xl mx-auto px-6 mb-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               "What are the advantages of using Next.js?",
@@ -51,7 +51,7 @@ export default function Chat() {
                 key={text}
                 type="button"
                 onClick={() => setInput(text)}
-                className="w-full rounded-full border border-gray-300/80 text-gray-700 hover:text-gray-900 hover:bg-white/20 px-4 py-2 text-sm transition-colors text-left backdrop-blur-sm"
+                className="w-full rounded-full border border-white text-black bg-white hover:bg-gray-100 hover:text-gray-900 px-4 py-2 text-sm transition-colors text-left shadow-lg"
               >
                 {text}
               </button>
