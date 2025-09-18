@@ -190,8 +190,10 @@ const PurePreviewMessage = ({
                     >
                       <div
                         className={cn("flex flex-col gap-4", {
-                          "bg-white/20 backdrop-blur-sm text-white px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl shadow-lg":
+                          "bg-white/60 backdrop-blur-sm text-black px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-br-xl shadow-lg":
                             message.role === "user",
+                          "bg-gray-800/60 backdrop-blur-lg text-gray-300 px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl shadow-lg":
+                            message.role === "assistant",
                         })}
                       >
                         {message.role === "assistant" && isLatestMessage && status === "streaming" ? (
@@ -224,7 +226,7 @@ const PurePreviewMessage = ({
                       initial={{ y: 5, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       key={`message-${message.id}-part-${i}`}
-                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-black/40 backdrop-blur-sm rounded-md border border-white/20 text-white shadow-lg"
+                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-black/40 backdrop-blur-sm rounded-md border border-white/20 text-black shadow-lg"
                     >
                       <div className="flex-1 flex items-center justify-center">
                         <div className="flex items-center justify-center w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full">
@@ -233,7 +235,7 @@ const PurePreviewMessage = ({
                         <div className="flex-1">
                           <div className="font-medium flex items-baseline gap-2">
                             {state === "input-streaming" ? "Calling" : "Called"}{" "}
-                            <span className="font-mono bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md text-white">
+                            <span className="font-mono bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md text-black">
                               {getToolName(part)}
                             </span>
                           </div>

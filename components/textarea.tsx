@@ -25,7 +25,7 @@ export const Textarea = ({
   return (
     <div className="relative w-full pt-2">
       <ShadcnTextarea
-        className="resize-none w-full rounded-2xl pr-12 pt-4 pb-16 bg-white/10 backdrop-blur-sm border-gray-300/80 focus-visible:border-gray-400/80 placeholder:text-gray-500/80 text-gray-900 shadow-lg"
+        className="resize-none w-full rounded-2xl pr-12 pt-4 pb-16 bg-white/60 backdrop-blur-sm border-gray-300/80 focus-visible:border-gray-400/80 placeholder:text-gray-500/80 text-gray-900 shadow-lg"
         value={input}
         autoFocus
         placeholder={"Send a message..."}
@@ -51,7 +51,7 @@ export const Textarea = ({
         <button
           type="button"
           onClick={stop}
-          className="cursor-pointer absolute right-2 bottom-2 rounded-full p-2 bg-white/20 backdrop-blur-sm text-gray-900 hover:bg-white/30 disabled:bg-white/10 disabled:cursor-not-allowed transition-colors shadow-lg"
+          className="cursor-pointer absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:cursor-not-allowed transition-colors shadow-lg"
         >
           <div className="animate-spin h-4 w-4">
             <svg className="h-4 w-4" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@ export const Textarea = ({
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="absolute right-2 bottom-2 rounded-full p-2 bg-white/20 backdrop-blur-sm text-gray-900 hover:bg-white/30 disabled:bg-white/10 disabled:text-gray-400/50 disabled:cursor-not-allowed transition-colors shadow-lg"
+          className="absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:text-gray-400/50 disabled:cursor-not-allowed transition-colors shadow-lg"
         >
           <ArrowUp className="h-4 w-4" />
         </button>

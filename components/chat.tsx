@@ -30,13 +30,13 @@ export default function Chat() {
       <div className="pointer-events-auto">
         <Header />
       </div>
-      <div className="flex-1 pointer-events-none">
+      <div className="flex-1 min-h-0 pointer-events-none">
         {messages.length === 0 ? (
           <div className="max-w-3xl mx-auto w-full px-6 pointer-events-none">
             <ProjectOverview />
           </div>
         ) : (
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto h-full">
             <Messages messages={messages} isLoading={isLoading} status={status} />
           </div>
         )}
@@ -64,7 +64,7 @@ export default function Chat() {
         </div>
       )}
 
-      <div className="relative pb-6 w-full max-w-3xl mx-auto px-6 pointer-events-auto">
+      <div className="relative pb-6 w-full max-w-3xl mx-auto px-6 pointer-events-auto flex-shrink-0">
         <form
           onSubmit={(e) => {
             e.preventDefault();

@@ -13,15 +13,30 @@ export function useScrollToBottom(): [
 
     if (container && end) {
       const observer = new MutationObserver(() => {
-        end.scrollIntoView({ behavior: 'instant', block: 'end' });
+        // Always scroll to bottom when new content is added
+        // This ensures the conversation stays at the bottom as messages arrive
+        requestAnimationFrame(() => {
+          const { scrollTop, scrollHeight, clientHeight } = container;
+          const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+          
+          // Auto-scroll if user is close to the bottom (within 150px) or if it's the first scroll
+          if (distanceFromBottom < 150 || scrollTop === 0) {
+            end.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }
+        });
       });
 
       observer.observe(container, {
         childList: true,
         subtree: true,
-        attributes: true,
-        characterData: true,
+        attributes: false,
+        characterData: true // Also observe text changes for streaming content
       });
+
+      // Initial scroll to bottom
+      setTimeout(() => {
+        end.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
 
       return () => observer.disconnect();
     }
