@@ -36,7 +36,7 @@ export default function Chat() {
             <ProjectOverview />
           </div>
         ) : (
-          <div className="pointer-events-auto h-full">
+          <div className="pointer-events-none h-full">
             <Messages messages={messages} isLoading={isLoading} status={status} />
           </div>
         )}

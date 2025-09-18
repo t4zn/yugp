@@ -25,7 +25,7 @@ export const Textarea = ({
   return (
     <div className="relative w-full pt-2">
       <ShadcnTextarea
-        className="resize-none w-full rounded-2xl pr-12 pt-4 pb-16 bg-white/60 backdrop-blur-sm border-gray-300/80 focus-visible:border-gray-400/80 placeholder:text-gray-500/80 text-gray-900 shadow-lg"
+        className="resize-none w-full rounded-2xl pr-12 pt-4 pb-16 bg-white/60 backdrop-blur-sm border-gray-300/80 focus-visible:border-gray-400/80 placeholder:text-gray-500/80 text-gray-900 shadow-lg max-h-32 overflow-y-auto"
         value={input}
         autoFocus
         placeholder={"Send a message..."}
@@ -40,6 +40,11 @@ export const Textarea = ({
               if (form) form.requestSubmit();
             }
           }
+        }}
+        style={{
+          minHeight: '60px',
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(156, 163, 175, 0.5) transparent'
         }}
       />
       <ModelPicker

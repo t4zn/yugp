@@ -192,7 +192,7 @@ const PurePreviewMessage = ({
                         className={cn("flex flex-col gap-4", {
                           "bg-white/60 backdrop-blur-sm text-black px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-br-xl shadow-lg":
                             message.role === "user",
-                          "bg-gray-800/60 backdrop-blur-lg text-gray-300 px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl shadow-lg":
+                          "bg-gray-800/80 backdrop-blur-lg text-gray-300 px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl shadow-lg":
                             message.role === "assistant",
                         })}
                       >
