@@ -19,19 +19,19 @@ export function useSplineMouseInteraction(
     const setupMouseInteraction = () => {
       try {
         // Multiple approaches to ensure mouse interaction works
-        const methods = [
-          () => (app as any).enableMouseInteraction?.(),
-          () => (app as any).setMouseInteraction?.(true),
-          () => { (app as any).mouseInteraction = true; },
-          () => { (app as any).enableMouse = true; },
-          () => { (app as any).interactionEnabled = true; }
+        const methods: Array<() => void> = [
+          () => app.enableMouseInteraction?.(),
+          () => app.setMouseInteraction?.(true),
+          () => { app.mouseInteraction = true; },
+          () => { app.enableMouse = true; },
+          () => { app.interactionEnabled = true; }
         ];
 
         methods.forEach((method, index) => {
           try {
             method();
             console.log(`Mouse interaction method ${index + 1} executed`);
-          } catch (error) {
+          } catch {
             console.log(`Mouse interaction method ${index + 1} not available`);
           }
         });
@@ -66,8 +66,10 @@ export function useSplineMouseInteraction(
 
     const forwardMouseEvent = (originalEvent: MouseEvent, eventType: string) => {
       const rect = canvas.getBoundingClientRect();
-      const x = originalEvent.clientX - rect.left;
-      const y = originalEvent.clientY - rect.top;
+      // Note: x and y coordinates calculated but not used in current implementation
+      // These could be used for custom event processing if needed
+      // const x = originalEvent.clientX - rect.left;
+      // const y = originalEvent.clientY - rect.top;
 
       // Create and dispatch the forwarded event
       const forwardedEvent = new MouseEvent(eventType, {
