@@ -51,7 +51,7 @@ export default function Chat() {
                 key={text}
                 type="button"
                 onClick={() => setInput(text)}
-                className="w-full rounded-full border border-zinc-800/80 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900/60 px-4 py-2 text-sm transition-colors text-left"
+                className="w-full rounded-full border border-gray-300 text-gray-700 hover:text-gray-900 hover:bg-gray-100 px-4 py-2 text-sm transition-colors text-left"
               >
                 {text}
               </button>
