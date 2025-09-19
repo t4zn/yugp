@@ -37,13 +37,13 @@ export async function POST(req: Request) {
           }
         }
         console.error(error);
-        return "An error occurred while processing your request.";
+        return "Request in queue due to heavy demand. Please try a different model or try again after some time.";
       },
     });
   } catch (error) {
     console.error('Chat API Error:', error);
     return new Response(
-      JSON.stringify({ error: "Failed to process your request. Please try again." }),
+      JSON.stringify({ error: "Request in queue due to heavy demand. Please try a different model or try again after some time." }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
