@@ -1,4 +1,4 @@
-# AI Learning Ecosystem - Interactive 3D Chat Interface
+# Taizun AI - Interactive 3D Chat Interface
 
 A cutting-edge AI-powered chat interface featuring immersive 3D animations and multi-modal capabilities, built for Drapels' AI learning ecosystem.
 
