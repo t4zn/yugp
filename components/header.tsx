@@ -1,4 +1,19 @@
-import { FC } from 'react';
+import { FC } from "react";
 
-// Minimal header: no bar, no toggle. Matches screenshot with clean top area.
-export const Header: FC = () => null;
+export const Header: FC = () => {
+  return (
+    <header
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "8px 12px",
+      }}
+    >
+      <img
+        src="/favicon.ico"
+        alt="favicon"
+        style={{ width: 20, height: 20 }}
+      />
+    </header>
+  );
+};
