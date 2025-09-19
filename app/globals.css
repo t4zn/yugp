@@ -124,3 +124,33 @@
     @apply text-foreground;
   }
 }
+
+/* Hide scrollbar for mobile-friendly experience */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile viewport height fix */
+.mobile-height {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for modern browsers */
+}
+
+/* Ensure touch scrolling works on mobile */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Mobile-specific message container */
+@media (max-width: 768px) {
+  .mobile-message-scroll {
+    pointer-events: auto !important;
+    touch-action: pan-y;
+  }
+}
