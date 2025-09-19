@@ -32,7 +32,7 @@ export default function Chat() {
       </div>
       <div className="flex-1 min-h-0 pointer-events-none overflow-hidden relative">
         {messages.length === 0 ? (
-          <div className="max-w-3xl mx-auto w-full px-6 pointer-events-none">
+          <div className="max-w-3xl mx-auto w-full px-6 pointer-events-auto">
             <ProjectOverview />
           </div>
         ) : (
