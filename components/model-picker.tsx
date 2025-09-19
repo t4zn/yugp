@@ -185,28 +185,28 @@ export const ModelPicker = ({
       {/* File Upload Pin Icon */}
       <button
         onClick={handleFileUpload}
-        className={`p-1.5 rounded-full transition-all duration-200 ${
+        className={`p-1 sm:p-1.5 rounded-full transition-all duration-200 ${
           isVisionModel 
             ? 'bg-purple-100 hover:bg-purple-200 text-purple-700 cursor-pointer' 
             : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60'
         }`}
         title={isVisionModel ? 'Upload image' : 'Select a vision model to upload images'}
       >
-        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66L9.64 16.2a2 2 0 01-2.83-2.83l8.49-8.49" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
       
       <Select value={selectedModel} onValueChange={setSelectedModel}>
-        <SelectTrigger className="min-w-[140px] h-8">
+        <SelectTrigger className="min-w-[100px] sm:min-w-[140px] h-6 sm:h-8 text-xs">
           <SelectValue placeholder="Select a model">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5">
               {selectedModelInfo?.icon}
-              <span className="font-bold text-[10px]">{selectedModelInfo?.name}</span>
+              <span className="font-bold text-[8px] sm:text-[10px] truncate max-w-[60px] sm:max-w-none">{selectedModelInfo?.name}</span>
             </div>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="min-w-[200px] backdrop-blur-md bg-white/80 border border-white/20">
+        <SelectContent className="min-w-[180px] sm:min-w-[200px] backdrop-blur-md bg-white/80 border border-white/20">
           {/* Regular Models Section */}
           <SelectGroup>
             <div className="px-2 py-1 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">
@@ -215,12 +215,12 @@ export const ModelPicker = ({
             {regularModels.map((modelId) => {
               const modelInfo = MODEL_FEATURES[modelId as modelID];
               return (
-                <SelectItem key={modelId} value={modelId} className="py-1.5">
-                  <div className="flex items-start gap-1.5">
+                <SelectItem key={modelId} value={modelId} className="py-1 sm:py-1.5">
+                  <div className="flex items-start gap-1 sm:gap-1.5">
                     <div className="mt-0.5">{modelInfo.icon}</div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="font-bold text-[10px]">{modelInfo.name}</span>
-                      <span className="text-[8px] text-muted-foreground leading-tight">
+                      <span className="font-bold text-[9px] sm:text-[10px]">{modelInfo.name}</span>
+                      <span className="text-[7px] sm:text-[8px] text-muted-foreground leading-tight">
                         {modelInfo.feature}
                       </span>
                     </div>
@@ -239,17 +239,17 @@ export const ModelPicker = ({
               {visionModels.map((modelId) => {
                 const modelInfo = MODEL_FEATURES[modelId as modelID];
                 return (
-                  <SelectItem key={modelId} value={modelId} className="py-1.5">
-                    <div className="flex items-start gap-1.5">
+                  <SelectItem key={modelId} value={modelId} className="py-1 sm:py-1.5">
+                    <div className="flex items-start gap-1 sm:gap-1.5">
                       <div className="mt-0.5">{modelInfo.icon}</div>
                       <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-1">
-                          <span className="font-bold text-[10px]">{modelInfo.name}</span>
-                          <span className="text-[7px] bg-purple-100 text-purple-700 px-1 py-0.5 rounded-full font-medium">
+                          <span className="font-bold text-[9px] sm:text-[10px]">{modelInfo.name}</span>
+                          <span className="text-[6px] sm:text-[7px] bg-purple-100 text-purple-700 px-1 py-0.5 rounded-full font-medium">
                             VISION
                           </span>
                         </div>
-                        <span className="text-[8px] text-muted-foreground leading-tight">
+                        <span className="text-[7px] sm:text-[8px] text-muted-foreground leading-tight">
                           {modelInfo.feature}
                         </span>
                       </div>
