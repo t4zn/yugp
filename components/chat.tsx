@@ -26,17 +26,17 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="h-screen flex flex-col justify-between w-full p-6 pointer-events-none max-h-screen">
+    <div className="mobile-height flex flex-col justify-between w-full p-6 pointer-events-none max-h-full overflow-hidden">
       <div className="pointer-events-auto flex-shrink-0">
         <Header />
       </div>
-      <div className="flex-1 min-h-0 pointer-events-none">
+      <div className="flex-1 min-h-0 pointer-events-none overflow-hidden relative">
         {messages.length === 0 ? (
           <div className="max-w-3xl mx-auto w-full px-6 pointer-events-none">
             <ProjectOverview />
           </div>
         ) : (
-          <div className="pointer-events-none h-full">
+          <div className="pointer-events-auto h-full touch-scroll">
             <Messages messages={messages} isLoading={isLoading} status={status} />
           </div>
         )}
