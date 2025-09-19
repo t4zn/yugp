@@ -1,25 +1,22 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import Image from "next/image";
 
 export const Header: FC = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <>
-      <style jsx>{`
-        .header-img {
-          width: 64px;
-          height: 64px;
-          margin-top: -36px;
-          margin-left:-16px;
-        }
-        @media (min-width: 768px) {
-          .header-img {
-            width: 128px;
-            height: 128px;
-            margin-top: -48px;
-            margin-left: 20px;
-          }
-        }
-      `}</style>
       <header
         style={{
           display: "flex",
@@ -30,10 +27,15 @@ export const Header: FC = () => {
         <Image
           src="/TaizunAI.PNG"
           alt="Taizun AI"
-          className="header-img"
           width={128}
           height={128}
           priority
+          style={{
+            width: isMobile ? '64px' : '128px',
+            height: isMobile ? '64px' : '128px',
+            marginTop: isMobile ? '-36px' : '-48px',
+            marginLeft: isMobile ? '-16px' : '20px',
+          }}
         />
       </header>
     </>
