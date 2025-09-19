@@ -152,4 +152,4 @@ export default function InfoOverlay() {
       )}
     </>
   );
-}info-overlay.tsx
+}
