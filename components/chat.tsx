@@ -26,8 +26,8 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="h-screen flex flex-col justify-between w-full p-6 pointer-events-none">
-      <div className="pointer-events-auto">
+    <div className="h-screen flex flex-col justify-between w-full p-6 pointer-events-none max-h-screen">
+      <div className="pointer-events-auto flex-shrink-0">
         <Header />
       </div>
       <div className="flex-1 min-h-0 pointer-events-none">
