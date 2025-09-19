@@ -72,6 +72,7 @@ interface ModelPickerProps {
   setSelectedModel: (model: modelID) => void;
   onImageUpload?: (imageData: string, fileName: string) => void;
   uploadedImage?: { data: string; name: string } | null;
+  onShowVisionError?: () => void;
 }
 
 export const ModelPicker = ({
@@ -79,6 +80,7 @@ export const ModelPicker = ({
   setSelectedModel,
   onImageUpload,
   uploadedImage,
+  onShowVisionError,
 }: ModelPickerProps) => {
   const selectedModelInfo = MODEL_FEATURES[selectedModel];
   
@@ -94,8 +96,8 @@ export const ModelPicker = ({
   
   const handleFileUpload = () => {
     if (!isVisionModel) {
-      // Show warning for non-vision models
-      showMessage('Please select a vision model to upload images', 'error');
+      // Show UI-friendly vision error instead of basic alert
+      onShowVisionError?.();
       return;
     }
     
@@ -133,7 +135,7 @@ export const ModelPicker = ({
           reader.onload = () => {
             const base64String = reader.result as string;
             onImageUpload?.(base64String, file.name);
-            showMessage(`Image "${file.name}" uploaded successfully`, 'success');
+            // Remove success message - user can see image preview instead
           };
           
           reader.onerror = () => {
@@ -204,7 +206,7 @@ export const ModelPicker = ({
             isVisionModel 
               ? uploadedImage
                 ? 'bg-green-100 hover:bg-green-200 text-green-700 cursor-pointer'
-                : 'bg-purple-100 hover:bg-purple-200 text-purple-700 cursor-pointer' 
+                : 'hover:bg-gray-100 text-black cursor-pointer' 
               : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60'
           }`}
           title={isVisionModel 

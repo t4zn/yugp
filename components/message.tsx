@@ -4,6 +4,7 @@ import { getToolName, type ReasoningUIPart, type UIMessage } from "ai";
 import { AnimatePresence, motion } from "motion/react";
 import { memo, useCallback, useEffect, useState } from "react";
 import equal from "fast-deep-equal";
+import Image from "next/image";
 
 import { Markdown } from "./markdown";
 import { cn } from "@/lib/utils";
@@ -183,10 +184,12 @@ const PurePreviewMessage = ({
               if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
                 return (
                   <div key={`message-${message.id}-file-${i}`} className="mb-2">
-                    <img
+                    <Image
                       src={part.url}
                       alt={`Uploaded image ${i + 1}`}
                       className="max-w-xs max-h-64 object-cover rounded-lg border border-gray-200 shadow-sm"
+                      width={300}
+                      height={256}
                     />
                   </div>
                 );
@@ -234,7 +237,8 @@ const PurePreviewMessage = ({
               
               // Handle tool parts
               if (part.type?.startsWith('tool-')) {
-                const toolPart = part as any; // Type assertion for tool parts
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const toolPart = part as any; // Tool parts have complex union types from AI SDK
                 const { state } = toolPart;
 
                 return (

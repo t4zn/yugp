@@ -7,12 +7,14 @@ import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
 import { Header } from "./header";
+import { VisionErrorToast } from "./vision-error-toast";
 import { toast } from "sonner";
 
 export default function Chat() {
   const [input, setInput] = useState("");
   const [selectedModel, setSelectedModel] = useState<modelID>(defaultModel);
   const [uploadedImage, setUploadedImage] = useState<{ data: string; name: string } | null>(null);
+  const [showVisionError, setShowVisionError] = useState(false);
   
   const { sendMessage, messages, status, stop } = useChat({
     onError: (error) => {
@@ -29,6 +31,16 @@ export default function Chat() {
 
   const handleImageUpload = (imageData: string, fileName: string) => {
     setUploadedImage({ data: imageData, name: fileName });
+    
+    // Auto-switch to a vision model if current model doesn't support vision
+    const visionModels = ['meta-llama/llama-4-maverick-17b-128e-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'];
+    if (!visionModels.includes(selectedModel)) {
+      setSelectedModel('meta-llama/llama-4-maverick-17b-128e-instruct'); // Default to Maverick for vision
+      toast.success(
+        "Switched to Llama 4 Maverick for image analysis",
+        { position: "top-center", richColors: true }
+      );
+    }
   };
 
   const clearUploadedImage = () => {
@@ -81,7 +93,7 @@ export default function Chat() {
             if (!input.trim() && !uploadedImage) return;
             
             // Create message parts array
-            const parts: any[] = [];
+            const parts: { type: 'text' | 'file'; text?: string; mediaType?: string; url?: string }[] = [];
             
             // Add text part if exists
             if (input.trim()) {
@@ -100,7 +112,8 @@ export default function Chat() {
             // Send message with parts
             sendMessage({
               role: 'user',
-              parts: parts,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              parts: parts as any, // Type assertion for message parts - AI SDK has complex union types
             }, { body: { selectedModel } });
             
             setInput("");
@@ -119,9 +132,16 @@ export default function Chat() {
             onImageUpload={handleImageUpload}
             uploadedImage={uploadedImage}
             onClearImage={clearUploadedImage}
+            onShowVisionError={() => setShowVisionError(true)}
           />
         </form>
       </div>
+      
+      {/* Vision Error Toast */}
+      <VisionErrorToast
+        isVisible={showVisionError}
+        onClose={() => setShowVisionError(false)}
+      />
     </div>
   );
 };

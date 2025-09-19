@@ -3,6 +3,8 @@ import { Textarea as ShadcnTextarea } from "@/components/ui/textarea";
 import { ArrowUp, Mic, MicOff } from "lucide-react";
 import { ModelPicker } from "./model-picker";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+
 
 interface InputProps {
   input: string;
@@ -15,6 +17,7 @@ interface InputProps {
   onImageUpload?: (imageData: string, fileName: string) => void;
   uploadedImage?: { data: string; name: string } | null;
   onClearImage?: () => void;
+  onShowVisionError?: () => void;
 }
 
 export const Textarea = ({
@@ -28,6 +31,7 @@ export const Textarea = ({
   onImageUpload,
   uploadedImage,
   onClearImage,
+  onShowVisionError,
 }: InputProps) => {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
@@ -127,13 +131,15 @@ export const Textarea = ({
       {uploadedImage && (
         <div className="mb-3 p-2 bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm">
           <div className="flex items-center gap-2">
-            <img 
+            <Image 
               src={uploadedImage.data} 
               alt={uploadedImage.name}
               className="w-12 h-12 object-cover rounded-md border border-gray-200"
+              width={48}
+              height={48}
             />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-700 truncate">{uploadedImage.name}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-700 truncate max-w-full">{uploadedImage.name}</p>
               <p className="text-xs text-gray-500">Image attached</p>
             </div>
             <button
@@ -177,6 +183,7 @@ export const Textarea = ({
         selectedModel={selectedModel}
         onImageUpload={onImageUpload}
         uploadedImage={uploadedImage}
+        onShowVisionError={onShowVisionError}
       />
 
       {/* Microphone button - only show when input is empty and speech recognition is supported */}

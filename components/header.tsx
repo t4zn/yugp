@@ -1,4 +1,5 @@
 import { FC } from "react";
+import Image from "next/image";
 
 export const Header: FC = () => {
   return (
@@ -26,10 +27,13 @@ export const Header: FC = () => {
           padding: "8px 12px",
         }}
       >
-        <img
+        <Image
           src="/TaizunAI.PNG"
           alt="Taizun AI"
           className="header-img"
+          width={128}
+          height={128}
+          priority
         />
       </header>
     </>
