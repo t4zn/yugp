@@ -8,6 +8,7 @@ import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
 import { Header } from "./header";
 import { VisionErrorToast } from "./vision-error-toast";
+import { QueueErrorToast } from "./queue-error-toast";
 import { toast } from "sonner";
 
 export default function Chat() {
@@ -15,15 +16,12 @@ export default function Chat() {
   const [selectedModel, setSelectedModel] = useState<modelID>(defaultModel);
   const [uploadedImage, setUploadedImage] = useState<{ data: string; name: string } | null>(null);
   const [showVisionError, setShowVisionError] = useState(false);
+  const [showQueueError, setShowQueueError] = useState(false);
   
   const { sendMessage, messages, status, stop } = useChat({
-    onError: (error) => {
-      toast.error(
-        error.message.length > 0
-          ? error.message
-          : "An error occured, please try again later.",
-        { position: "top-center", richColors: true },
-      );
+    onError: () => {
+      // Show custom queue error toast instead of generic toast
+      setShowQueueError(true);
     },
   });
 
@@ -141,6 +139,12 @@ export default function Chat() {
       <VisionErrorToast
         isVisible={showVisionError}
         onClose={() => setShowVisionError(false)}
+      />
+      
+      {/* Queue Error Toast */}
+      <QueueErrorToast
+        isVisible={showQueueError}
+        onClose={() => setShowQueueError(false)}
       />
     </div>
   );
