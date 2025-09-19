@@ -59,12 +59,18 @@ export function InteractionLayer({ children }: InteractionLayerProps) {
     const handleTouchEvent = (event: TouchEvent) => {
       const target = event.target as HTMLElement;
       
-      // Allow touch events for scrollable elements
+      // Always allow file input interactions
+      if ((target as HTMLInputElement).type === 'file' || target.tagName === 'INPUT') {
+        return; // Allow all input interactions
+      }
+      
+      // Allow touch events for scrollable elements and UI components
       let currentElement = target;
       while (currentElement && currentElement !== layer) {
         const computedStyle = window.getComputedStyle(currentElement);
         if (computedStyle.pointerEvents === 'auto' || 
             currentElement.classList.contains('scrollable-container') ||
+            currentElement.classList.contains('touch-manipulation') ||
             computedStyle.overflow === 'auto' || 
             computedStyle.overflow === 'scroll' ||
             computedStyle.overflowY === 'auto' ||
