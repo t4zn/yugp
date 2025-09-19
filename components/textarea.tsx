@@ -1,7 +1,8 @@
 import { modelID } from "@/ai/providers";
 import { Textarea as ShadcnTextarea } from "@/components/ui/textarea";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Mic, MicOff } from "lucide-react";
 import { ModelPicker } from "./model-picker";
+import { useState, useEffect, useRef } from "react";
 
 interface InputProps {
   input: string;
@@ -22,6 +23,65 @@ export const Textarea = ({
   selectedModel,
   setSelectedModel,
 }: InputProps) => {
+  const [isListening, setIsListening] = useState(false);
+  const [isSupported, setIsSupported] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  useEffect(() => {
+    // Check if speech recognition is supported
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      setIsSupported(true);
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      
+      const recognition = recognitionRef.current;
+      if (recognition) {
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+          setIsListening(true);
+        };
+
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
+          const transcript = event.results[0][0].transcript;
+          // Create a synthetic event to match the expected type
+          const syntheticEvent = {
+            currentTarget: { value: transcript }
+          } as React.ChangeEvent<HTMLInputElement>;
+          handleInputChange(syntheticEvent);
+        };
+
+        recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+      }
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, [handleInputChange]);
+
+  const startListening = () => {
+    if (recognitionRef.current && !isListening) {
+      recognitionRef.current.start();
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+    }
+  };
   return (
     <div className="relative w-full pt-2">
       <ShadcnTextarea
@@ -51,6 +111,25 @@ export const Textarea = ({
         setSelectedModel={setSelectedModel}
         selectedModel={selectedModel}
       />
+
+      {/* Microphone button - only show when input is empty and speech recognition is supported */}
+      {isSupported && !input.trim() && status !== "streaming" && status !== "submitted" && (
+        <button
+          type="button"
+          onClick={isListening ? stopListening : startListening}
+          className={`absolute right-14 bottom-2 rounded-full p-2 backdrop-blur-sm transition-colors shadow-lg ${
+            isListening 
+              ? 'bg-red-500/80 text-white hover:bg-red-600/80' 
+              : 'bg-white/60 text-gray-900 hover:bg-white/70'
+          }`}
+        >
+          {isListening ? (
+            <MicOff className="h-4 w-4" />
+          ) : (
+            <Mic className="h-4 w-4" />
+          )}
+        </button>
+      )}
 
       {status === "streaming" || status === "submitted" ? (
         <button
