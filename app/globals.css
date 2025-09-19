@@ -141,6 +141,13 @@ html, body {
     height: 100dvh;
   }
   
+  /* Allow file inputs to work properly on mobile */
+  input[type="file"] {
+    position: absolute !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important;
+  }
+  
   /* Allow specific scrollable containers */
   .scrollable-container {
     overflow-y: auto !important;
@@ -190,5 +197,18 @@ html, body {
   .markdown-content code {
     word-break: break-all;
     white-space: pre-wrap;
+  }
+  
+  /* Ensure touch targets are large enough on mobile */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Make file upload button more accessible on mobile */
+  .model-picker button {
+    padding: 8px !important;
+    min-height: 40px;
+    min-width: 40px;
   }
 }
