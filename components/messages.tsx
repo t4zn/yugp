@@ -14,10 +14,15 @@ export const Messages = ({
   const [containerRef, endRef] = useScrollToBottom();
   return (
     <div
-      className="h-full overflow-y-auto pointer-events-none"
+      className="h-full overflow-y-auto pointer-events-none scrollbar-hide"
+      style={{
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none'
+      }}
       ref={containerRef}
     >
-      <div className="max-w-xl mx-auto py-8 space-y-4 pointer-events-auto">
+      <div className="max-w-xl mx-auto py-8 space-y-4 pointer-events-auto min-h-full">
         {messages.map((m, i) => (
           <Message
             key={i}
