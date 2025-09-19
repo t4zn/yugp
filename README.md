@@ -1,6 +1,6 @@
 # Taizun AI - Interactive 3D Chat Interface
 
-A cutting-edge AI-powered chat interface featuring immersive 3D animations and multi-modal capabilities, built for Drapels' AI learning ecosystem.
+A cutting-edge AI-powered chat interface featuring immersive 3D animations and multi-modal capabilities.
 
 ## 🌟 Features
 
@@ -189,4 +189,4 @@ This project is part of the Drapels AI learning ecosystem. All rights reserved.
 
 ---
 
-Built with ❤️ for the future of AI-powered learning experiences.
+Built with ❤️ for the future of AI-powered experiences.
