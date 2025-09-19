@@ -1,5 +1,6 @@
 "use client";
 import { modelID, MODELS } from "@/ai/providers";
+import { useRef } from "react";
 import {
   Select,
   SelectContent,
@@ -83,6 +84,7 @@ export const ModelPicker = ({
   onShowVisionError,
 }: ModelPickerProps) => {
   const selectedModelInfo = MODEL_FEATURES[selectedModel];
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Separate models into regular and vision-capable
   const regularModels = MODELS.filter(modelId => 
@@ -101,64 +103,54 @@ export const ModelPicker = ({
       return;
     }
     
+    // Use the hidden file input for better mobile compatibility
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      // Create file input for vision models
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.multiple = false;
+      const file = e.target.files?.[0];
+      if (!file) {
+        return;
+      }
       
-      input.onchange = async (e) => {
-        try {
-          const file = (e.target as HTMLInputElement).files?.[0];
-          if (!file) {
-            return;
-          }
-          
-          // Validate file type
-          if (!file.type.startsWith('image/')) {
-            showMessage('Please select a valid image file', 'error');
-            return;
-          }
-          
-          // Validate file size (max 10MB)
-          const maxSize = 10 * 1024 * 1024; // 10MB
-          if (file.size > maxSize) {
-            showMessage('Image file size must be less than 10MB', 'error');
-            return;
-          }
-          
-          console.log('Image selected:', file.name, 'Size:', Math.round(file.size / 1024) + 'KB');
-          
-          // Convert image to base64
-          const reader = new FileReader();
-          reader.onload = () => {
-            const base64String = reader.result as string;
-            onImageUpload?.(base64String, file.name);
-            // Remove success message - user can see image preview instead
-          };
-          
-          reader.onerror = () => {
-            showMessage('Error reading the image file', 'error');
-          };
-          
-          reader.readAsDataURL(file);
-          
-        } catch (error) {
-          console.error('Error processing file:', error);
-          showMessage('Error processing the selected file', 'error');
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showMessage('Please select a valid image file', 'error');
+        return;
+      }
+      
+      // Validate file size (max 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        showMessage('Image file size must be less than 10MB', 'error');
+        return;
+      }
+      
+      console.log('Image selected:', file.name, 'Size:', Math.round(file.size / 1024) + 'KB');
+      
+      // Convert image to base64
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        onImageUpload?.(base64String, file.name);
+        // Clear the input so the same file can be selected again
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
         }
       };
       
-      input.onerror = () => {
-        showMessage('Error accessing file system', 'error');
+      reader.onerror = () => {
+        showMessage('Error reading the image file', 'error');
       };
       
-      input.click();
+      reader.readAsDataURL(file);
       
     } catch (error) {
-      console.error('Error creating file input:', error);
-      showMessage('Error opening file selector', 'error');
+      console.error('Error processing file:', error);
+      showMessage('Error processing the selected file', 'error');
     }
   };
   
@@ -197,18 +189,40 @@ export const ModelPicker = ({
   };
   
   return (
-    <div className="absolute bottom-2 left-2 flex items-center gap-2">
+    <div className="absolute bottom-2 left-2 flex items-center gap-2 model-picker">
+      {/* Hidden file input for mobile compatibility */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleFileChange}
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          opacity: 0,
+          pointerEvents: 'none',
+          width: '1px',
+          height: '1px'
+        }}
+      />
+      
       {/* File Upload Pin Icon */}
       <div className="relative">
         <button
           onClick={handleFileUpload}
-          className={`p-1 sm:p-1.5 rounded-full transition-all duration-200 ${
+          className={`p-1 sm:p-1.5 rounded-full transition-all duration-200 touch-manipulation select-none ${
             isVisionModel 
               ? uploadedImage
                 ? 'bg-green-100 hover:bg-green-200 text-green-700 cursor-pointer'
                 : 'hover:bg-gray-100 text-black cursor-pointer' 
               : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60'
           }`}
+          style={{
+            WebkitTouchCallout: 'none',
+            WebkitUserSelect: 'none',
+            touchAction: 'manipulation'
+          }}
           title={isVisionModel 
             ? uploadedImage 
               ? `Image uploaded: ${uploadedImage.name}. Click to change.`
