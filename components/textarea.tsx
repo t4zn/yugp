@@ -31,8 +31,17 @@ export const Textarea = ({
     // Check if speech recognition is supported
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       setIsSupported(true);
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
+      const SpeechRecognition = (window as Window & {
+        SpeechRecognition?: typeof window.SpeechRecognition;
+        webkitSpeechRecognition?: typeof window.webkitSpeechRecognition;
+      }).SpeechRecognition || (window as Window & {
+        SpeechRecognition?: typeof window.SpeechRecognition;
+        webkitSpeechRecognition?: typeof window.webkitSpeechRecognition;
+      }).webkitSpeechRecognition;
+      
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+      }
       
       const recognition = recognitionRef.current;
       if (recognition) {
