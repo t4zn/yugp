@@ -125,6 +125,31 @@
   }
 }
 
+/* Global mobile scroll prevention */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+  }
+  
+  /* Allow specific scrollable containers */
+  .scrollable-container {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+}
+
 /* Hide scrollbar for mobile-friendly experience */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -139,6 +164,7 @@
 .mobile-height {
   height: 100vh;
   height: 100dvh; /* Dynamic viewport height for modern browsers */
+  overflow: hidden; /* Prevent page-level scrolling */
 }
 
 /* Ensure touch scrolling works on mobile */
@@ -149,8 +175,20 @@
 
 /* Mobile-specific message container */
 @media (max-width: 768px) {
-  .mobile-message-scroll {
-    pointer-events: auto !important;
-    touch-action: pan-y;
+  .markdown-content {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .markdown-content pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  
+  .markdown-content code {
+    word-break: break-all;
+    white-space: pre-wrap;
   }
 }
