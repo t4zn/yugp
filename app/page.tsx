@@ -16,7 +16,7 @@ const SplineRobot = dynamic(() => import('@/components/SplineRobot'), {
 
 export default function Page() {
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden">
       {/* Spline Background - Full Screen with mouse events enabled */}
       <div className="absolute inset-0 z-0">
         <SplineRobot className="w-full h-full" />
