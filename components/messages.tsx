@@ -14,11 +14,13 @@ export const Messages = ({
   const [containerRef, endRef] = useScrollToBottom();
   return (
     <div
-      className="h-full overflow-y-auto pointer-events-none scrollbar-hide"
+      className="h-full overflow-y-auto pointer-events-auto scrollbar-hide touch-scroll scrollable-container"
       style={{
         WebkitOverflowScrolling: 'touch',
         scrollbarWidth: 'none',
-        msOverflowStyle: 'none'
+        msOverflowStyle: 'none',
+        touchAction: 'pan-y',
+        overscrollBehavior: 'contain'
       }}
       ref={containerRef}
     >
