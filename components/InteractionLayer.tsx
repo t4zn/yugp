@@ -56,24 +56,56 @@ export function InteractionLayer({ children }: InteractionLayerProps) {
       }
     };
 
+    const handleTouchEvent = (event: TouchEvent) => {
+      const target = event.target as HTMLElement;
+      
+      // Allow touch events for scrollable elements
+      let currentElement = target;
+      while (currentElement && currentElement !== layer) {
+        const computedStyle = window.getComputedStyle(currentElement);
+        if (computedStyle.pointerEvents === 'auto' || 
+            currentElement.classList.contains('scrollable-container') ||
+            computedStyle.overflow === 'auto' || 
+            computedStyle.overflow === 'scroll' ||
+            computedStyle.overflowY === 'auto' ||
+            computedStyle.overflowY === 'scroll') {
+          return; // Allow the touch event to proceed normally
+        }
+        currentElement = currentElement.parentElement as HTMLElement;
+      }
+      
+      // Prevent default to stop background scrolling
+      if (event.type === 'touchmove') {
+        event.preventDefault();
+      }
+    };
+
     // Add global mouse event listeners
     document.addEventListener('mousemove', handleMouseEvent, { passive: true });
     document.addEventListener('mousedown', handleMouseEvent);
     document.addEventListener('mouseup', handleMouseEvent);
     document.addEventListener('click', handleMouseEvent);
+    
+    // Add touch event listeners for mobile
+    document.addEventListener('touchstart', handleTouchEvent, { passive: true });
+    document.addEventListener('touchmove', handleTouchEvent, { passive: false });
+    document.addEventListener('touchend', handleTouchEvent, { passive: true });
 
     return () => {
       document.removeEventListener('mousemove', handleMouseEvent);
       document.removeEventListener('mousedown', handleMouseEvent);
       document.removeEventListener('mouseup', handleMouseEvent);
       document.removeEventListener('click', handleMouseEvent);
+      document.removeEventListener('touchstart', handleTouchEvent);
+      document.removeEventListener('touchmove', handleTouchEvent);
+      document.removeEventListener('touchend', handleTouchEvent);
     };
   }, []);
 
   return (
     <div 
       ref={layerRef}
-      className="absolute inset-0 z-10 pointer-events-none"
+      className="absolute inset-0 z-10 pointer-events-none overflow-hidden"
     >
       {children}
     </div>
