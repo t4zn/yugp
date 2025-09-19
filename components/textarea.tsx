@@ -12,6 +12,9 @@ interface InputProps {
   stop: () => void;
   selectedModel: modelID;
   setSelectedModel: (model: modelID) => void;
+  onImageUpload?: (imageData: string, fileName: string) => void;
+  uploadedImage?: { data: string; name: string } | null;
+  onClearImage?: () => void;
 }
 
 export const Textarea = ({
@@ -22,6 +25,9 @@ export const Textarea = ({
   stop,
   selectedModel,
   setSelectedModel,
+  onImageUpload,
+  uploadedImage,
+  onClearImage,
 }: InputProps) => {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
@@ -117,6 +123,32 @@ export const Textarea = ({
   };
   return (
     <div className="relative w-full pt-2">
+      {/* Image preview section */}
+      {uploadedImage && (
+        <div className="mb-3 p-2 bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm">
+          <div className="flex items-center gap-2">
+            <img 
+              src={uploadedImage.data} 
+              alt={uploadedImage.name}
+              className="w-12 h-12 object-cover rounded-md border border-gray-200"
+            />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-700 truncate">{uploadedImage.name}</p>
+              <p className="text-xs text-gray-500">Image attached</p>
+            </div>
+            <button
+              type="button"
+              onClick={onClearImage}
+              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+              title="Remove image"
+            >
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
       <ShadcnTextarea
         className="resize-none w-full rounded-2xl pr-12 pt-4 pb-16 bg-white/60 backdrop-blur-sm border-gray-300/80 focus-visible:border-gray-400/80 placeholder:text-gray-500/80 text-gray-900 shadow-lg max-h-32 overflow-y-auto"
         value={input}
@@ -143,6 +175,8 @@ export const Textarea = ({
       <ModelPicker
         setSelectedModel={setSelectedModel}
         selectedModel={selectedModel}
+        onImageUpload={onImageUpload}
+        uploadedImage={uploadedImage}
       />
 
       {/* Microphone button - only show when input is empty and speech recognition is supported */}
@@ -194,7 +228,7 @@ export const Textarea = ({
       ) : (
         <button
           type="submit"
-          disabled={isLoading || !input.trim()}
+          disabled={isLoading || (!input.trim() && !uploadedImage)}
           className="absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:text-gray-400/50 disabled:cursor-not-allowed transition-colors shadow-lg"
         >
           <ArrowUp className="h-4 w-4" />

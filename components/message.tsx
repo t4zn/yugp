@@ -179,8 +179,21 @@ const PurePreviewMessage = ({
 
           <div className="flex flex-col w-full space-y-4">
             {message.parts?.map((part, i) => {
-              switch (part.type) {
-                case "text":
+              // Handle file parts (images)
+              if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
+                return (
+                  <div key={`message-${message.id}-file-${i}`} className="mb-2">
+                    <img
+                      src={part.url}
+                      alt={`Uploaded image ${i + 1}`}
+                      className="max-w-xs max-h-64 object-cover rounded-lg border border-gray-200 shadow-sm"
+                    />
+                  </div>
+                );
+              }
+              
+              // Handle text parts
+              if (part.type === 'text') {
                   return (
                     <motion.div
                       initial={{ y: 5, opacity: 0 }}
@@ -217,59 +230,65 @@ const PurePreviewMessage = ({
                       </div>
                     </motion.div>
                   );
-                // TODO: add your other tools here
-                case "tool-getWeather":
-                  const { state } = part;
+              }
+              
+              // Handle tool parts
+              if (part.type?.startsWith('tool-')) {
+                const toolPart = part as any; // Type assertion for tool parts
+                const { state } = toolPart;
 
-                  return (
-                    <motion.div
-                      initial={{ y: 5, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      key={`message-${message.id}-part-${i}`}
-                      className="flex flex-col gap-2 p-2 mb-3 text-sm bg-black/40 backdrop-blur-sm rounded-md border border-white/20 text-black shadow-lg"
-                    >
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="flex items-center justify-center w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full">
-                          <PocketKnife className="h-4 w-4" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-medium flex items-baseline gap-2">
-                            {state === "input-streaming" ? "Calling" : "Called"}{" "}
-                            <span className="font-mono bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md text-black">
-                              {getToolName(part)}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="w-5 h-5 flex items-center justify-center">
-                          {state === "input-streaming" ? (
-                            isLatestMessage && status !== "ready" ? (
-                              <Loader2 className="animate-spin h-4 w-4 text-zinc-500" />
-                            ) : (
-                              <StopCircle className="h-4 w-4 text-red-500" />
-                            )
-                          ) : state === "output-available" ? (
-                            <CheckCircle size={14} className="text-green-600" />
-                          ) : null}
+                return (
+                  <motion.div
+                    initial={{ y: 5, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    key={`message-${message.id}-part-${i}`}
+                    className="flex flex-col gap-2 p-2 mb-3 text-sm bg-black/40 backdrop-blur-sm rounded-md border border-white/20 text-black shadow-lg"
+                  >
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="flex items-center justify-center w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full">
+                        <PocketKnife className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium flex items-baseline gap-2">
+                          {state === "input-streaming" ? "Calling" : "Called"}{" "}
+                          <span className="font-mono bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md text-black">
+                            {getToolName(toolPart)}
+                          </span>
                         </div>
                       </div>
-                    </motion.div>
-                  );
-                case "reasoning":
-                  return (
-                    <ReasoningMessagePart
-                      key={`message-${message.id}-${i}`}
-                      part={part}
-                      isReasoning={
-                        (message.parts &&
-                          status === "streaming" &&
-                          i === message.parts.length - 1) ??
-                        false
-                      }
-                    />
-                  );
-                default:
-                  return null;
+                      <div className="w-5 h-5 flex items-center justify-center">
+                        {state === "input-streaming" ? (
+                          isLatestMessage && status !== "ready" ? (
+                            <Loader2 className="animate-spin h-4 w-4 text-zinc-500" />
+                          ) : (
+                            <StopCircle className="h-4 w-4 text-red-500" />
+                          )
+                        ) : state === "output-available" ? (
+                          <CheckCircle size={14} className="text-green-600" />
+                        ) : null}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
               }
+              
+              // Handle reasoning parts
+              if (part.type === 'reasoning') {
+                return (
+                  <ReasoningMessagePart
+                    key={`message-${message.id}-${i}`}
+                    part={part}
+                    isReasoning={
+                      (message.parts &&
+                        status === "streaming" &&
+                        i === message.parts.length - 1) ??
+                      false
+                    }
+                  />
+                );
+              }
+              
+              return null;
             })}
           </div>
         </div>

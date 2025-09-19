@@ -38,7 +38,7 @@ const MODEL_FEATURES: Record<modelID, { name: string; feature: string; icon: Rea
       </svg>
     )
   },
-  "meta-llama/llama-4-maverick-8b-instruct": {
+  "meta-llama/llama-4-maverick-17b-128e-instruct": {
     name: "Llama 4 Maverick",
     feature: "Vision support, multimodal capabilities",
     icon: (
@@ -70,20 +70,24 @@ const MODEL_FEATURES: Record<modelID, { name: string; feature: string; icon: Rea
 interface ModelPickerProps {
   selectedModel: modelID;
   setSelectedModel: (model: modelID) => void;
+  onImageUpload?: (imageData: string, fileName: string) => void;
+  uploadedImage?: { data: string; name: string } | null;
 }
 
 export const ModelPicker = ({
   selectedModel,
   setSelectedModel,
+  onImageUpload,
+  uploadedImage,
 }: ModelPickerProps) => {
   const selectedModelInfo = MODEL_FEATURES[selectedModel];
   
   // Separate models into regular and vision-capable
   const regularModels = MODELS.filter(modelId => 
-    !['meta-llama/llama-4-maverick-8b-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'].includes(modelId)
+    !['meta-llama/llama-4-maverick-17b-128e-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'].includes(modelId)
   );
   const visionModels = MODELS.filter(modelId => 
-    ['meta-llama/llama-4-maverick-8b-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'].includes(modelId)
+    ['meta-llama/llama-4-maverick-17b-128e-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'].includes(modelId)
   );
   
   const isVisionModel = visionModels.includes(selectedModel);
@@ -123,10 +127,20 @@ export const ModelPicker = ({
           }
           
           console.log('Image selected:', file.name, 'Size:', Math.round(file.size / 1024) + 'KB');
-          showMessage(`Image "${file.name}" selected successfully`, 'success');
           
-          // TODO: Implement actual image upload/processing logic here
-          // For now, we just validate and show success message
+          // Convert image to base64
+          const reader = new FileReader();
+          reader.onload = () => {
+            const base64String = reader.result as string;
+            onImageUpload?.(base64String, file.name);
+            showMessage(`Image "${file.name}" uploaded successfully`, 'success');
+          };
+          
+          reader.onerror = () => {
+            showMessage('Error reading the image file', 'error');
+          };
+          
+          reader.readAsDataURL(file);
           
         } catch (error) {
           console.error('Error processing file:', error);
@@ -183,19 +197,31 @@ export const ModelPicker = ({
   return (
     <div className="absolute bottom-2 left-2 flex items-center gap-2">
       {/* File Upload Pin Icon */}
-      <button
-        onClick={handleFileUpload}
-        className={`p-1 sm:p-1.5 rounded-full transition-all duration-200 ${
-          isVisionModel 
-            ? 'bg-purple-100 hover:bg-purple-200 text-purple-700 cursor-pointer' 
-            : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60'
-        }`}
-        title={isVisionModel ? 'Upload image' : 'Select a vision model to upload images'}
-      >
-        <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66L9.64 16.2a2 2 0 01-2.83-2.83l8.49-8.49" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
+      <div className="relative">
+        <button
+          onClick={handleFileUpload}
+          className={`p-1 sm:p-1.5 rounded-full transition-all duration-200 ${
+            isVisionModel 
+              ? uploadedImage
+                ? 'bg-green-100 hover:bg-green-200 text-green-700 cursor-pointer'
+                : 'bg-purple-100 hover:bg-purple-200 text-purple-700 cursor-pointer' 
+              : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60'
+          }`}
+          title={isVisionModel 
+            ? uploadedImage 
+              ? `Image uploaded: ${uploadedImage.name}. Click to change.`
+              : 'Upload image' 
+            : 'Select a vision model to upload images'
+          }
+        >
+          <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66L9.64 16.2a2 2 0 01-2.83-2.83l8.49-8.49" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+        {uploadedImage && (
+          <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
+        )}
+      </div>
       
       <Select value={selectedModel} onValueChange={setSelectedModel}>
         <SelectTrigger className="min-w-[100px] sm:min-w-[140px] h-6 sm:h-8 text-xs">

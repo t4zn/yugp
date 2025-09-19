@@ -11,29 +11,40 @@ export async function POST(req: Request) {
     selectedModel,
   }: { messages: UIMessage[]; selectedModel: modelID } = await req.json();
 
-  const result = streamText({
-    model: model.languageModel(selectedModel),
-    system: "You are a helpful assistant.",
-    messages: convertToModelMessages(messages),
-    stopWhen: stepCountIs(5), // enable multi-step agentic flow
-    tools: {
-      getWeather: weatherTool,
-    },
-    experimental_telemetry: {
-      isEnabled: false,
-    },
-  });
+  try {
+    const result = streamText({
+      model: model.languageModel(selectedModel),
+      system: "You are a helpful assistant. When users share images, analyze them carefully and provide detailed, helpful responses about what you see.",
+      messages: convertToModelMessages(messages),
+      stopWhen: stepCountIs(5), // enable multi-step agentic flow
+      tools: {
+        getWeather: weatherTool,
+      },
+      experimental_telemetry: {
+        isEnabled: false,
+      },
+    });
 
-  return result.toUIMessageStreamResponse({
-    sendReasoning: true,
-    onError: (error) => {
-      if (error instanceof Error) {
-        if (error.message.includes("Rate limit")) {
-          return "Rate limit exceeded. Please try again later.";
+    return result.toUIMessageStreamResponse({
+      sendReasoning: true,
+      onError: (error) => {
+        if (error instanceof Error) {
+          if (error.message.includes("Rate limit")) {
+            return "Rate limit exceeded. Please try again later.";
+          }
+          if (error.message.includes("vision") || error.message.includes("multimodal")) {
+            return "This model doesn't support image analysis. Please select a vision-capable model.";
+          }
         }
-      }
-      console.error(error);
-      return "An error occurred.";
-    },
-  });
+        console.error(error);
+        return "An error occurred while processing your request.";
+      },
+    });
+  } catch (error) {
+    console.error('Chat API Error:', error);
+    return new Response(
+      JSON.stringify({ error: "Failed to process your request. Please try again." }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 }

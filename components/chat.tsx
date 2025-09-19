@@ -12,6 +12,8 @@ import { toast } from "sonner";
 export default function Chat() {
   const [input, setInput] = useState("");
   const [selectedModel, setSelectedModel] = useState<modelID>(defaultModel);
+  const [uploadedImage, setUploadedImage] = useState<{ data: string; name: string } | null>(null);
+  
   const { sendMessage, messages, status, stop } = useChat({
     onError: (error) => {
       toast.error(
@@ -24,6 +26,14 @@ export default function Chat() {
   });
 
   const isLoading = status === "streaming" || status === "submitted";
+
+  const handleImageUpload = (imageData: string, fileName: string) => {
+    setUploadedImage({ data: imageData, name: fileName });
+  };
+
+  const clearUploadedImage = () => {
+    setUploadedImage(null);
+  };
 
   return (
     <div className="mobile-height flex flex-col justify-between w-full p-6 pointer-events-none max-h-full overflow-hidden">
@@ -66,10 +76,35 @@ export default function Chat() {
 
       <div className="relative pb-6 w-full max-w-3xl mx-auto px-6 pointer-events-auto flex-shrink-0">
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            sendMessage({ text: input }, { body: { selectedModel } });
+            if (!input.trim() && !uploadedImage) return;
+            
+            // Create message parts array
+            const parts: any[] = [];
+            
+            // Add text part if exists
+            if (input.trim()) {
+              parts.push({ type: 'text', text: input });
+            }
+            
+            // Add image part if exists
+            if (uploadedImage) {
+              parts.push({
+                type: 'file',
+                mediaType: 'image/*',
+                url: uploadedImage.data,
+              });
+            }
+            
+            // Send message with parts
+            sendMessage({
+              role: 'user',
+              parts: parts,
+            }, { body: { selectedModel } });
+            
             setInput("");
+            clearUploadedImage();
           }}
           className="relative"
         >
@@ -81,6 +116,9 @@ export default function Chat() {
             isLoading={isLoading}
             status={status}
             stop={stop}
+            onImageUpload={handleImageUpload}
+            uploadedImage={uploadedImage}
+            onClearImage={clearUploadedImage}
           />
         </form>
       </div>
