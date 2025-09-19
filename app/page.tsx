@@ -16,10 +16,10 @@ const SplineRobot = dynamic(() => import('@/components/SplineRobot'), {
 
 export default function Page() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative mobile-height w-full overflow-hidden fixed inset-0">
       {/* Spline Background - Full Screen with mouse events enabled */}
       <div className="absolute inset-0 z-0">
-        <SplineRobot className="w-full h-full" />
+        <SplineRobot className="w-full h-full object-cover" />
       </div>
 
       {/* Chat Overlay with InteractionLayer - Selective pointer events */}
