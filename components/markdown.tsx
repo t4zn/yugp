@@ -5,7 +5,26 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const components: Partial<Components> = {
-  pre: ({ children }) => <>{children}</>,
+  pre: ({ children }) => (
+    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm max-w-full">
+      {children}
+    </pre>
+  ),
+  code: ({ node, className, children, ...props }) => {
+    const isInline = !className;
+    if (isInline) {
+      return (
+        <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm font-mono break-words" {...props}>
+          {children}
+        </code>
+      );
+    }
+    return (
+      <code className="block overflow-x-auto max-w-full whitespace-pre-wrap break-words" {...props}>
+        {children}
+      </code>
+    );
+  },
   ol: ({ node, children, ...props }) => {
     return (
       <ol className="list-decimal list-outside ml-4" {...props}>
@@ -95,9 +114,11 @@ const remarkPlugins = [remarkGfm];
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
-    <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
-      {children}
-    </ReactMarkdown>
+    <div className="markdown-content max-w-full overflow-hidden">
+      <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
+        {children}
+      </ReactMarkdown>
+    </div>
   );
 };
 
