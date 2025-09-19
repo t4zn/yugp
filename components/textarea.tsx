@@ -91,6 +91,30 @@ export const Textarea = ({
       recognitionRef.current.stop();
     }
   };
+
+  // Handle touch events for mobile browsers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent default touch behavior
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent click event from firing after touch
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    // Only handle click if it's not a touch device or if touch events weren't handled
+    if (e.detail === 0) return; // Ignore programmatic clicks
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
   return (
     <div className="relative w-full pt-2">
       <ShadcnTextarea
@@ -125,11 +149,13 @@ export const Textarea = ({
       {isSupported && !input.trim() && status !== "streaming" && status !== "submitted" && (
         <button
           type="button"
-          onClick={isListening ? stopListening : startListening}
-          className={`absolute right-14 bottom-2 rounded-full p-2 backdrop-blur-sm transition-colors shadow-lg ${
+          onClick={handleClick}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className={`absolute right-14 bottom-2 rounded-full p-2 backdrop-blur-sm transition-colors shadow-lg touch-manipulation select-none ${
             isListening 
-              ? 'bg-red-500/80 text-white hover:bg-red-600/80' 
-              : 'bg-white/60 text-gray-900 hover:bg-white/70'
+              ? 'bg-red-500/80 text-white hover:bg-red-600/80 active:bg-red-700/80' 
+              : 'bg-white/60 text-gray-900 hover:bg-white/70 active:bg-white/80'
           }`}
         >
           {isListening ? (
