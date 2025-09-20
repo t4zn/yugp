@@ -82,15 +82,17 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
       </svg>
     )
   },
-  // Image Generation Models
+    // Image Generation Models
   "dalle-mini": {
     name: "Stable Diffusion XL",
     feature: "High quality, detailed images",
     type: "image",
     icon: (
-      <div className="w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded flex items-center justify-center">
-        <span className="text-[8px] font-bold text-white">SD</span>
-      </div>
+      <img 
+        src="/diffusion.PNG" 
+        alt="Stable Diffusion" 
+        className="w-5 h-5 object-contain"
+      />
     )
   },
   "flux": {
@@ -98,9 +100,11 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     feature: "Fast generation with aesthetic quality",
     type: "image",
     icon: (
-      <div className="w-3 h-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded flex items-center justify-center">
-        <span className="text-[6px] font-bold text-white">P</span>
-      </div>
+      <img 
+        src="/playground.webp" 
+        alt="Playground" 
+        className="w-3 h-3 object-contain"
+      />
     )
   }
 };
