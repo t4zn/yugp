@@ -195,7 +195,7 @@ export const Textarea = ({
           onClick={handleClick}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className={`absolute right-14 bottom-2 rounded-full p-2 backdrop-blur-sm transition-colors shadow-lg touch-manipulation select-none ${
+          className={`icon-btn absolute right-14 bottom-2 rounded-full p-2 backdrop-blur-sm transition-colors shadow-lg touch-manipulation select-none ${
             isListening 
               ? 'bg-red-500/80 text-white hover:bg-red-600/80 active:bg-red-700/80' 
               : 'bg-white/60 text-gray-900 hover:bg-white/70 active:bg-white/80'
@@ -213,7 +213,7 @@ export const Textarea = ({
         <button
           type="button"
           onClick={stop}
-          className="cursor-pointer absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:cursor-not-allowed transition-colors shadow-lg"
+          className="icon-btn cursor-pointer absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:cursor-not-allowed transition-colors shadow-lg"
         >
           <div className="animate-spin h-4 w-4">
             <svg className="h-4 w-4" viewBox="0 0 24 24">
@@ -238,7 +238,7 @@ export const Textarea = ({
         <button
           type="submit"
           disabled={isLoading || (!input.trim() && !uploadedImage)}
-          className="absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:text-gray-400/50 disabled:cursor-not-allowed transition-colors shadow-lg"
+          className="icon-btn absolute right-2 bottom-2 rounded-full p-2 bg-white/60 backdrop-blur-sm text-gray-900 hover:bg-white/70 disabled:bg-white/10 disabled:text-gray-400/50 disabled:cursor-not-allowed transition-colors shadow-lg"
         >
           <ArrowUp className="h-4 w-4" />
         </button>
