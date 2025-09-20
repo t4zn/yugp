@@ -11,14 +11,17 @@ import { VisionErrorToast } from "./vision-error-toast";
 import { QueueErrorToast } from "./queue-error-toast";
 import { toast } from "sonner";
 
+// Add image generation models to the existing types
+type AllModelID = modelID | 'dalle-mini' | 'flux';
+
 export default function Chat() {
   const [input, setInput] = useState("");
-  const [selectedModel, setSelectedModel] = useState<modelID>(defaultModel);
+  const [selectedModel, setSelectedModel] = useState<AllModelID>(defaultModel);
   const [uploadedImage, setUploadedImage] = useState<{ data: string; name: string } | null>(null);
   const [showVisionError, setShowVisionError] = useState(false);
   const [showQueueError, setShowQueueError] = useState(false);
   
-  const { sendMessage, messages, status, stop } = useChat({
+  const { sendMessage, messages, status, stop, setMessages } = useChat({
     onError: () => {
       // Show custom queue error toast instead of generic toast
       setShowQueueError(true);
@@ -27,12 +30,14 @@ export default function Chat() {
 
   const isLoading = status === "streaming" || status === "submitted";
 
+  const isImageModel = ['dalle-mini', 'flux'].includes(selectedModel);
+  const isVisionModel = ['meta-llama/llama-4-maverick-17b-128e-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'].includes(selectedModel);
+
   const handleImageUpload = (imageData: string, fileName: string) => {
     setUploadedImage({ data: imageData, name: fileName });
     
     // Auto-switch to a vision model if current model doesn't support vision
-    const visionModels = ['meta-llama/llama-4-maverick-17b-128e-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'];
-    if (!visionModels.includes(selectedModel)) {
+    if (!isVisionModel && !isImageModel) {
       setSelectedModel('meta-llama/llama-4-maverick-17b-128e-instruct'); // Default to Maverick for vision
       toast.success(
         "Switched to Llama 4 Maverick for image analysis",
@@ -43,6 +48,131 @@ export default function Chat() {
 
   const clearUploadedImage = () => {
     setUploadedImage(null);
+  };
+
+  // Function to handle image generation
+  const handleImageGeneration = async (prompt: string, model: string) => {
+    // Add user message first
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      role: 'user' as const,
+      parts: [{ type: 'text' as const, text: prompt }],
+    };
+
+    // Add loading message
+    const loadingMessage = {
+      id: `loading-${Date.now()}`,
+      role: 'assistant' as const,
+      parts: [{ type: 'text' as const, text: `Generating image...` }],
+    };
+
+    // Update messages to show user prompt and loading state
+    setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
+
+    try {
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: prompt.trim(),
+          model,
+          width: 512,
+          height: 512,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.imageUrl) {
+        // Create assistant message with the generated image
+        const imageMessage = {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant' as const,
+          parts: [
+            { type: 'text' as const, text: `Here's your generated image: "${prompt}"` },
+            { 
+              type: 'file' as const, 
+              mediaType: 'image/png',
+              url: result.imageUrl 
+            }
+          ],
+        };
+        
+        // Replace loading message with the actual image message
+        setMessages(prevMessages => {
+          const newMessages = [...prevMessages];
+          newMessages[newMessages.length - 1] = imageMessage; // Replace the loading message
+          return newMessages;
+        });
+        
+        return result.imageUrl;
+      } else {
+        const errorMsg = result.error || 'Failed to generate image';
+        console.error('Image generation failed:', errorMsg);
+        
+        // Replace loading message with error message
+        const errorMessage = {
+          id: `error-${Date.now()}`,
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: `Sorry, I couldn't generate the image. ${errorMsg}` }],
+        };
+        
+        setMessages(prevMessages => {
+          const newMessages = [...prevMessages];
+          newMessages[newMessages.length - 1] = errorMessage;
+          return newMessages;
+        });
+        
+        // Show user-friendly toast
+        if (errorMsg.includes('not available on the free tier')) {
+          toast.error(errorMsg, {
+            position: "top-center",
+            richColors: true,
+            duration: 7000,
+            action: {
+              label: 'Switch to CompVis SD 1.4',
+              onClick: () => setSelectedModel('dalle-mini')
+            }
+          });
+        } else {
+          toast.error(errorMsg, {
+            position: "top-center",
+            richColors: true,
+            duration: 5000
+          });
+        }
+        return null;
+      }
+    } catch (error: any) {
+      console.error('Error generating image:', error);
+      
+      // Replace loading message with error message
+      const errorMessage = {
+        id: `error-${Date.now()}`,
+        role: 'assistant' as const,
+        parts: [{ type: 'text' as const, text: `Network error occurred while generating the image. Please try again.` }],
+      };
+      
+      setMessages(prevMessages => {
+        const newMessages = [...prevMessages];
+        newMessages[newMessages.length - 1] = errorMessage;
+        return newMessages;
+      });
+      
+      let networkErrorMessage = 'Network error. Please try again.';
+      if (error.message) {
+        networkErrorMessage = error.message;
+      }
+      
+      toast.error(networkErrorMessage, {
+        position: "top-center",
+        richColors: true,
+        duration: 5000
+      });
+      return null;
+    }
   };
 
   return (
@@ -62,15 +192,20 @@ export default function Chat() {
         )}
       </div>
 
-      {messages.length === 0 && (
+{messages.length === 0 && (
         <div className="hidden md:block w-full max-w-3xl mx-auto px-6 mb-3 pointer-events-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {[
+            {(isImageModel ? [
+              "A cute cat wearing a space helmet",
+              "A peaceful mountain landscape at sunset",
+              "A colorful abstract painting",
+              "A robot reading a book in a library",
+            ] : [
               "What are the advantages of using Next.js?",
               "Write code to demonstrate Dijkstra's algorithm",
               "Help me write an essay about Silicon Valley",
               "What is the weather in San Francisco?",
-            ].map((text) => (
+            ]).map((text) => (
               <button
                 key={text}
                 type="button"
@@ -90,38 +225,49 @@ export default function Chat() {
             e.preventDefault();
             if (!input.trim() && !uploadedImage) return;
             
-            // Create message parts array
-            const parts: { type: 'text' | 'file'; text?: string; mediaType?: string; url?: string }[] = [];
-            
-            // Add text part if exists
-            if (input.trim()) {
-              parts.push({ type: 'text', text: input });
+            // Handle image generation models
+            if (isImageModel && input.trim()) {
+              const inputValue = input.trim();
+              setInput(""); // Clear input immediately
+              await handleImageGeneration(inputValue, selectedModel);
+              return;
             }
             
-            // Add image part if exists
-            if (uploadedImage) {
-              parts.push({
-                type: 'file',
-                mediaType: 'image/*',
-                url: uploadedImage.data,
-              });
+            // Handle text/vision models
+            if (!isImageModel) {
+              // Create message parts array
+              const parts: { type: 'text' | 'file'; text?: string; mediaType?: string; url?: string }[] = [];
+              
+              // Add text part if exists
+              if (input.trim()) {
+                parts.push({ type: 'text', text: input });
+              }
+              
+              // Add image part if exists
+              if (uploadedImage) {
+                parts.push({
+                  type: 'file',
+                  mediaType: 'image/*',
+                  url: uploadedImage.data,
+                });
+              }
+              
+              // Send message with parts
+              sendMessage({
+                role: 'user',
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                parts: parts as any, // Type assertion for message parts - AI SDK has complex union types
+              }, { body: { selectedModel: selectedModel as modelID } });
+              
+              setInput("");
+              clearUploadedImage();
             }
-            
-            // Send message with parts
-            sendMessage({
-              role: 'user',
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              parts: parts as any, // Type assertion for message parts - AI SDK has complex union types
-            }, { body: { selectedModel } });
-            
-            setInput("");
-            clearUploadedImage();
           }}
           className="relative"
         >
           <Textarea
-            selectedModel={selectedModel}
-            setSelectedModel={setSelectedModel}
+            selectedModel={selectedModel as modelID}
+            setSelectedModel={(model) => setSelectedModel(model)}
             handleInputChange={(e) => setInput(e.currentTarget.value)}
             input={input}
             isLoading={isLoading}
