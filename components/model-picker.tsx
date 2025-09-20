@@ -219,7 +219,7 @@ export const ModelPicker = ({
   };
   
   return (
-    <div className="absolute bottom-2 left-2 flex items-center gap-2 model-picker">
+    <div className="absolute bottom-2 left-2 flex items-center gap-2 model-picker model-picker-select">
       <input
         ref={fileInputRef}
         type="file"
@@ -273,54 +273,64 @@ export const ModelPicker = ({
           <SelectValue placeholder="Select a model">
             <div className="flex items-center gap-1 sm:gap-1.5">
               {selectedModelInfo?.icon}
-              <span className="font-bold text-[8px] sm:text-[10px] truncate max-w-[60px] sm:max-w-none">{selectedModelInfo?.name}</span>
+              <span className="font-bold text-[9px] sm:text-[11px] truncate max-w-[60px] sm:max-w-none">{selectedModelInfo?.name}</span>
             </div>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="min-w-[180px] sm:min-w-[200px] backdrop-blur-md bg-white/80 border border-white/20">
-          {/* Text Models Section */}
-          <SelectGroup>
-            <div className="px-2 py-1 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">
-              Text Models
-            </div>
-            {textModels.map((modelId) => {
-              const modelInfo = MODEL_FEATURES[modelId];
-              return (
-                <SelectItem key={modelId} value={modelId} className="py-1 sm:py-1.5">
-                  <div className="flex items-start gap-1 sm:gap-1.5">
-                    <div className="mt-0.5">{modelInfo.icon}</div>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-bold text-[9px] sm:text-[10px]">{modelInfo.name}</span>
-                      <span className="text-[7px] sm:text-[8px] text-muted-foreground leading-tight">
-                        {modelInfo.feature}
-                      </span>
-                    </div>
-                  </div>
-                </SelectItem>
-              );
-            })}
-          </SelectGroup>
-          
-          {/* Vision Models Section */}
-          {visionModels.length > 0 && (
-            <SelectGroup>
-              <div className="px-2 py-1 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-t border-gray-200/50 mt-1 pt-2">
-                Vision Models
+        <SelectContent className="min-w-[400px] sm:min-w-[480px] max-h-[300px] backdrop-blur-md bg-white/80 border border-white/20 overflow-visible">
+          <div 
+            className="w-full p-2" 
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: '1fr 1fr', 
+              gap: '12px',
+              width: '100%',
+              minWidth: '400px'
+            }}
+          >
+            {/* Column 1: Text Models */}
+            <div className="space-y-0.5">
+              <div className="px-1 py-0.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-b border-gray-200/50 mb-1 text-center">
+                Text Models
               </div>
+              {textModels.map((modelId) => {
+                const modelInfo = MODEL_FEATURES[modelId];
+                return (
+                  <SelectItem key={modelId} value={modelId} className="py-1 cursor-pointer hover:bg-gray-50/50">
+                    <div className="flex items-start gap-1.5 w-full">
+                      <div className="mt-0.5 flex-shrink-0">{modelInfo.icon}</div>
+                      <div className="flex flex-col gap-0 min-w-0 flex-1">
+                        <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
+                        <span className="text-[8px] text-muted-foreground leading-tight line-clamp-1">
+                          {modelInfo.feature}
+                        </span>
+                      </div>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </div>
+
+            {/* Column 2: Vision and Image Models */}
+            <div className="space-y-0.5">
+              <div className="px-1 py-0.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-b border-gray-200/50 mb-1 text-center">
+                Vision & Image
+              </div>
+              {/* Vision Models */}
               {visionModels.map((modelId) => {
                 const modelInfo = MODEL_FEATURES[modelId];
                 return (
-                  <SelectItem key={modelId} value={modelId} className="py-1 sm:py-1.5">
-                    <div className="flex items-start gap-1 sm:gap-1.5">
-                      <div className="mt-0.5">{modelInfo.icon}</div>
-                      <div className="flex flex-col gap-0.5">
+                  <SelectItem key={modelId} value={modelId} className="py-1 cursor-pointer hover:bg-gray-50/50">
+                    <div className="flex items-start gap-1.5 w-full">
+                      <div className="mt-0.5 flex-shrink-0">{modelInfo.icon}</div>
+                      <div className="flex flex-col gap-0 min-w-0 flex-1">
                         <div className="flex items-center gap-1">
-                          <span className="font-bold text-[9px] sm:text-[10px]">{modelInfo.name}</span>
-                          <span className="text-[6px] sm:text-[7px] bg-purple-100 text-purple-700 px-1 py-0.5 rounded-full font-medium">
+                          <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
+                          <span className="text-[7px] bg-purple-100 text-purple-700 px-0.5 py-0 rounded-full font-medium flex-shrink-0">
                             VISION
                           </span>
                         </div>
-                        <span className="text-[7px] sm:text-[8px] text-muted-foreground leading-tight">
+                        <span className="text-[8px] text-muted-foreground leading-tight line-clamp-1">
                           {modelInfo.feature}
                         </span>
                       </div>
@@ -328,29 +338,22 @@ export const ModelPicker = ({
                   </SelectItem>
                 );
               })}
-            </SelectGroup>
-          )}
-
-          {/* Image Generation Models Section */}
-          {imageModels.length > 0 && (
-            <SelectGroup>
-              <div className="px-2 py-1 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-t border-gray-200/50 mt-1 pt-2">
-                Image Generation
-              </div>
+              
+              {/* Image Generation Models */}
               {imageModels.map((modelId) => {
                 const modelInfo = MODEL_FEATURES[modelId];
                 return (
-                  <SelectItem key={modelId} value={modelId} className="py-1 sm:py-1.5">
-                    <div className="flex items-start gap-1 sm:gap-1.5">
-                      <div className="mt-0.5">{modelInfo.icon}</div>
-                      <div className="flex flex-col gap-0.5">
+                  <SelectItem key={modelId} value={modelId} className="py-1 cursor-pointer hover:bg-gray-50/50">
+                    <div className="flex items-start gap-1.5 w-full">
+                      <div className="mt-0.5 flex-shrink-0">{modelInfo.icon}</div>
+                      <div className="flex flex-col gap-0 min-w-0 flex-1">
                         <div className="flex items-center gap-1">
-                          <span className="font-bold text-[9px] sm:text-[10px]">{modelInfo.name}</span>
-                          <span className="text-[6px] sm:text-[7px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded-full font-medium">
+                          <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
+                          <span className="text-[7px] bg-blue-100 text-blue-700 px-0.5 py-0 rounded-full font-medium flex-shrink-0">
                             IMAGE
                           </span>
                         </div>
-                        <span className="text-[7px] sm:text-[8px] text-muted-foreground leading-tight">
+                        <span className="text-[8px] text-muted-foreground leading-tight line-clamp-1">
                           {modelInfo.feature}
                         </span>
                       </div>
@@ -358,8 +361,8 @@ export const ModelPicker = ({
                   </SelectItem>
                 );
               })}
-            </SelectGroup>
-          )}
+            </div>
+          </div>
         </SelectContent>
       </Select>
     </div>
