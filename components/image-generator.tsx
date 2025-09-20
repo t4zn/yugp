@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -89,7 +90,7 @@ export function ImageGenerator({ selectedModel: initialModel }: ImageGeneratorPr
       setCopied(true);
       toast.success('Prompt copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy prompt');
     }
   };
@@ -188,10 +189,13 @@ export function ImageGenerator({ selectedModel: initialModel }: ImageGeneratorPr
               </div>
             ) : generatedImage ? (
               <div className="space-y-4">
-                <img
+                <Image
                   src={generatedImage}
                   alt="Generated image"
+                  width={512}
+                  height={512}
                   className="max-w-full h-auto rounded-lg shadow-lg"
+                  unoptimized
                 />
                 <Button
                   onClick={handleDownload}

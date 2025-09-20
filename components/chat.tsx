@@ -145,7 +145,7 @@ export default function Chat() {
         }
         return null;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error generating image:', error);
       
       // Replace loading message with error message
@@ -162,7 +162,7 @@ export default function Chat() {
       });
       
       let networkErrorMessage = 'Network error. Please try again.';
-      if (error.message) {
+      if (error instanceof Error && error.message) {
         networkErrorMessage = error.message;
       }
       

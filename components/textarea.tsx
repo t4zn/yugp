@@ -5,6 +5,8 @@ import { ModelPicker } from "./model-picker";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
+// Add image generation models to the existing types
+type AllModelID = modelID | 'dalle-mini' | 'flux';
 
 interface InputProps {
   input: string;
@@ -12,8 +14,8 @@ interface InputProps {
   isLoading: boolean;
   status: string;
   stop: () => void;
-  selectedModel: modelID;
-  setSelectedModel: (model: modelID) => void;
+  selectedModel: AllModelID;
+  setSelectedModel: (model: AllModelID) => void;
   onImageUpload?: (imageData: string, fileName: string) => void;
   uploadedImage?: { data: string; name: string } | null;
   onClearImage?: () => void;

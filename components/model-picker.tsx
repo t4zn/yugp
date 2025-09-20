@@ -129,7 +129,6 @@ export const ModelPicker = ({
   const imageModels = ALL_MODELS.filter(modelId => MODEL_FEATURES[modelId].type === 'image');
   
   const isVisionModel = visionModels.includes(selectedModel);
-  const isImageModel = imageModels.includes(selectedModel);
   
   const handleFileUpload = () => {
     if (!isVisionModel) {

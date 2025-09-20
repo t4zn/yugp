@@ -53,7 +53,7 @@ export async function generateImage(request: ImageGenerationRequest): Promise<Im
     const steps = Math.min(request.num_inference_steps || config.defaultSteps, config.maxSteps);
     const guidanceScale = request.guidance_scale || 7.5;
 
-    const parameters: any = {
+    const parameters: Record<string, unknown> = {
       width: request.width || 512,
       height: request.height || 512,
       num_inference_steps: steps,
@@ -74,7 +74,7 @@ export async function generateImage(request: ImageGenerationRequest): Promise<Im
     
     try {
       // Try to treat as Blob first
-      const blob = response as any;
+      const blob = response as unknown as Blob;
       if (blob && typeof blob.arrayBuffer === 'function') {
         const arrayBuffer = await blob.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
@@ -84,7 +84,7 @@ export async function generateImage(request: ImageGenerationRequest): Promise<Im
         // Handle case where response is already base64 or URL
         imageUrl = typeof response === 'string' ? response : String(response);
       }
-    } catch (error) {
+    } catch {
       // Fallback to string conversion
       imageUrl = typeof response === 'string' ? response : String(response);
     }
@@ -95,23 +95,25 @@ export async function generateImage(request: ImageGenerationRequest): Promise<Im
       model: request.model
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error generating image with ${request.model}:`, error);
     
     let errorMessage = 'Failed to generate image';
     
-    if (error.message?.includes('rate limit')) {
-      errorMessage = 'Rate limit exceeded. Please try again later.';
-    } else if (error.message?.includes('loading')) {
-      errorMessage = 'Model is loading. Please try again in a few moments.';
-    } else if (error.message?.includes('overloaded')) {
-      errorMessage = 'Service is currently overloaded. Please try again later.';
-    } else if (error.message?.includes('No Inference Provider')) {
-      errorMessage = `${config.name} is not available on the free tier. Consider upgrading to Hugging Face Pro or try a different model.`;
-    } else if (error.message?.includes('InputError')) {
-      errorMessage = `Model configuration error for ${config.name}. Please try a different model.`;
-    } else if (error.message?.includes('exceeds maximum')) {
-      errorMessage = 'Model parameter limit exceeded. Please try again.';
+    if (error instanceof Error) {
+      if (error.message?.includes('rate limit')) {
+        errorMessage = 'Rate limit exceeded. Please try again later.';
+      } else if (error.message?.includes('loading')) {
+        errorMessage = 'Model is loading. Please try again in a few moments.';
+      } else if (error.message?.includes('overloaded')) {
+        errorMessage = 'Service is currently overloaded. Please try again later.';
+      } else if (error.message?.includes('No Inference Provider')) {
+        errorMessage = `${config.name} is not available on the free tier. Consider upgrading to Hugging Face Pro or try a different model.`;
+      } else if (error.message?.includes('InputError')) {
+        errorMessage = `Model configuration error for ${config.name}. Please try a different model.`;
+      } else if (error.message?.includes('exceeds maximum')) {
+        errorMessage = 'Model parameter limit exceeded. Please try again.';
+      }
     }
 
     return {
