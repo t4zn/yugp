@@ -345,7 +345,7 @@ export const ModelPicker = ({
                       <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-1">
                           <span className="font-bold text-[9px] sm:text-[10px]">{modelInfo.name}</span>
-                          <span className="text-[6px] sm:text-[7px] bg-blue-200 text-blue-700 px-1 py-0.5 rounded-full font-medium">
+                          <span className="text-[6px] sm:text-[7px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded-full font-medium">
                             IMAGE
                           </span>
                         </div>
