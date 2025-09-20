@@ -88,11 +88,11 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     feature: "High quality, detailed images",
     type: "image",
     icon: (
-      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/>
-        <path d="M12 6c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6zm0 10c-2.206 0-4-1.794-4-4s1.794-4 4-4 4 1.794 4 4-1.794 4-4 4z"/>
-        <circle cx="12" cy="12" r="2" fill="#000000"/>
-      </svg>
+      <img 
+        src="/diffusion.PNG" 
+        alt="Stable Diffusion" 
+        className="w-5 h-5 object-contain"
+      />
     )
   },
   "flux": {
