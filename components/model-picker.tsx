@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { modelID, MODELS } from "@/ai/providers";
 import { useRef, ReactNode } from "react";
 import {
@@ -88,9 +89,11 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     feature: "High quality, detailed images",
     type: "image",
     icon: (
-      <img 
-        src="/diffusion.PNG" 
-        alt="Stable Diffusion" 
+      <Image
+        src="/diffusion.PNG"
+        alt="Stable Diffusion"
+        width={20}
+        height={20}
         className="w-5 h-5 object-contain"
       />
     )
@@ -100,9 +103,11 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     feature: "Fast generation with aesthetic quality",
     type: "image",
     icon: (
-      <img 
-        src="/playground.webp" 
-        alt="Playground" 
+      <Image
+        src="/playground.webp"
+        alt="Playground"
+        width={12}
+        height={12}
         className="w-3 h-3 object-contain"
       />
     )
@@ -246,7 +251,7 @@ export const ModelPicker = ({
       <div className="relative">
         <button
           onClick={handleFileUpload}
-          className={`p-1 sm:p-1.5 rounded-full transition-all duration-200 touch-manipulation select-none ${
+          className={`icon-btn p-1 sm:p-1.5 rounded-full transition-all duration-200 touch-manipulation select-none ${
             isVisionModel 
               ? uploadedImage
                 ? 'bg-green-100 hover:bg-green-200 text-green-700 cursor-pointer'
