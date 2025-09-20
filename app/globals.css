@@ -199,10 +199,23 @@ html, body {
     white-space: pre-wrap;
   }
   
-  /* Ensure touch targets are large enough on mobile */
-  button, [role="button"] {
+  /* Ensure touch targets are large enough on mobile (opt-in) */
+  .tap-target {
     min-height: 44px;
     min-width: 44px;
+  }
+  
+  /* Compact circular icon buttons (mic, send, upload) */
+  .icon-btn {
+    min-width: unset;
+    min-height: unset;
+    width: 36px;
+    height: 36px;
+    padding: 8px; /* matches p-2 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
   }
   
   /* Make file upload button more accessible on mobile */
@@ -210,6 +223,14 @@ html, body {
     padding: 8px !important;
     min-height: 40px;
     min-width: 40px;
+  }
+  /* But allow compact sized icon buttons explicitly */
+  .model-picker button.icon-btn {
+    min-height: unset !important;
+    min-width: unset !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 8px !important;
   }
 }
 
