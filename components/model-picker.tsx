@@ -1,10 +1,10 @@
 "use client";
+import React from "react";
 import { modelID, MODELS } from "@/ai/providers";
 import { useRef, ReactNode } from "react";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -88,11 +88,9 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     feature: "High quality, detailed images",
     type: "image",
     icon: (
-      <img 
-        src="/diffusion.PNG" 
-        alt="Stable Diffusion" 
-        className="w-5 h-5 object-contain"
-      />
+      <div className="w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded flex items-center justify-center">
+        <span className="text-[8px] font-bold text-white">SD</span>
+      </div>
     )
   },
   "flux": {
@@ -100,11 +98,9 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     feature: "Fast generation with aesthetic quality",
     type: "image",
     icon: (
-      <img 
-        src="/playground.webp" 
-        alt="Playground" 
-        className="w-3 h-3 object-contain"
-      />
+      <div className="w-3 h-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded flex items-center justify-center">
+        <span className="text-[6px] font-bold text-white">P</span>
+      </div>
     )
   }
 };
