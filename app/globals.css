@@ -212,3 +212,18 @@ html, body {
     min-width: 40px;
   }
 }
+
+/* Custom Select component styling for grid layout */
+.model-picker-select [data-radix-select-viewport] {
+  width: 100% !important;
+}
+
+.model-picker-select [data-radix-select-content] {
+  min-width: 400px !important;
+}
+
+@media (min-width: 640px) {
+  .model-picker-select [data-radix-select-content] {
+    min-width: 480px !important;
+  }
+}
