@@ -1,6 +1,6 @@
 "use client";
 import { modelID, MODELS } from "@/ai/providers";
-import { useRef } from "react";
+import { useRef, ReactNode } from "react";
 import {
   Select,
   SelectContent,
@@ -124,6 +124,12 @@ export const ModelPicker = ({
   uploadedImage,
   onShowVisionError,
 }: ModelPickerProps) => {
+  // Single title component that changes alignment based on screen size
+  const SectionTitle = ({ children }: { children: ReactNode }) => (
+    <div className="w-full px-1 py-0.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-b border-gray-200/50 mb-1 text-left sm:text-center">
+      {children}
+    </div>
+  );
   const selectedModelInfo = MODEL_FEATURES[selectedModel];
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -277,22 +283,11 @@ export const ModelPicker = ({
             </div>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="min-w-[400px] sm:min-w-[480px] max-h-[300px] backdrop-blur-md bg-white/80 border border-white/20 overflow-visible">
-          <div 
-            className="w-full p-2" 
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: '1fr 1fr', 
-              gap: '12px',
-              width: '100%',
-              minWidth: '400px'
-            }}
-          >
-            {/* Column 1: Text Models */}
-            <div className="space-y-0.5">
-              <div className="px-1 py-0.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-b border-gray-200/50 mb-1 text-center">
-                Text Models
-              </div>
+        <SelectContent className="w-[280px] sm:w-[480px] max-h-[300px] backdrop-blur-md bg-white/80 border border-white/20 overflow-visible">
+          <div className="w-full p-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Text Models Section */}
+            <div className="space-y-1">
+              <SectionTitle>Text Models</SectionTitle>
               {textModels.map((modelId) => {
                 const modelInfo = MODEL_FEATURES[modelId];
                 return (
@@ -311,11 +306,9 @@ export const ModelPicker = ({
               })}
             </div>
 
-            {/* Column 2: Vision and Image Models */}
-            <div className="space-y-0.5">
-              <div className="px-1 py-0.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-b border-gray-200/50 mb-1 text-center">
-                Vision & Image
-              </div>
+            {/* Vision Models Section */}
+            <div className="space-y-1">
+              <SectionTitle>Vision & Image</SectionTitle>
               {/* Vision Models */}
               {visionModels.map((modelId) => {
                 const modelInfo = MODEL_FEATURES[modelId];
@@ -326,7 +319,7 @@ export const ModelPicker = ({
                       <div className="flex flex-col gap-0 min-w-0 flex-1">
                         <div className="flex items-center gap-1">
                           <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
-                          <span className="text-[7px] bg-purple-100 text-purple-700 px-0.5 py-0 rounded-full font-medium flex-shrink-0">
+                          <span className="text-[6px] bg-purple-100 text-purple-700 px-1 py-0.5 rounded-full font-medium flex-shrink-0">
                             VISION
                           </span>
                         </div>
@@ -349,7 +342,7 @@ export const ModelPicker = ({
                       <div className="flex flex-col gap-0 min-w-0 flex-1">
                         <div className="flex items-center gap-1">
                           <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
-                          <span className="text-[7px] bg-blue-100 text-blue-700 px-0.5 py-0 rounded-full font-medium flex-shrink-0">
+                          <span className="text-[6px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded-full font-medium flex-shrink-0">
                             IMAGE
                           </span>
                         </div>
