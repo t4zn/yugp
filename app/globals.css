@@ -188,15 +188,29 @@ html, body {
     hyphens: auto;
   }
   
+  /* Only code blocks get horizontal scroll */
   .markdown-content pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
+    overflow-x: auto !important;
+    white-space: pre !important;
+    word-break: keep-all !important;
+    word-wrap: normal !important;
+    max-width: 100% !important;
   }
   
-  .markdown-content code {
-    word-break: break-all;
-    white-space: pre-wrap;
+  .markdown-content pre code {
+    white-space: pre !important;
+    word-break: keep-all !important;
+    word-wrap: normal !important;
+  }
+  
+  /* Allow normal text elements to wrap */
+  .markdown-content p,
+  .markdown-content li,
+  .markdown-content div:not(pre),
+  .markdown-content span:not(code) {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
   
   /* Ensure touch targets are large enough on mobile (opt-in) */
