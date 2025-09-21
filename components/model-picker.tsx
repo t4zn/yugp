@@ -12,17 +12,19 @@ import {
 } from "./ui/select";
 
 // Add image generation models to the existing types
-type AllModelID = modelID | 'flux' | 'dalle-mini';
+type AllModelID = modelID | 'flux' | 'dalle-mini' | 'veo-3' | 'heygen';
 
-// Combined list of all models (text, vision, and image)
+// Combined list of all models (text, vision, image, and video)
 const ALL_MODELS: AllModelID[] = [
   ...MODELS as AllModelID[],
   'dalle-mini',
-  'flux'
+  'flux',
+  'veo-3',
+  'heygen'
 ];
 
 // Model features and icons mapping
-const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: React.ReactElement; type: 'text' | 'vision' | 'image' }> = {
+const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: React.ReactElement; type: 'text' | 'vision' | 'image' | 'video' }> = {
   "openai/gpt-oss-120b": {
     name: "GPT OSS 120B",
     feature: "Advanced reasoning, large context",
@@ -106,6 +108,27 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
         height={12}
         className="w-3 h-3 object-contain"
       />
+    )
+  },
+  // Video Generation Models
+  "veo-3": {
+    name: "VEO 3",
+    feature: "Advanced video generation with realistic motion",
+    type: "video",
+    icon: (
+      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    )
+  },
+  "heygen": {
+    name: "Heygen",
+    feature: "AI avatar and personalized video creation",
+    type: "video",
+    icon: (
+      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z" />
+      </svg>
     )
   }
 };
@@ -199,7 +222,7 @@ const ImageModelPopup = ({
               Premium Feature
             </h3>
             <p className="text-xs text-gray-600 mb-2 leading-relaxed">
-              Image generation requires premium access. Subscribe to premium or enter your access code to unlock image providers.
+              Image and video generation require premium access. Subscribe to premium or enter your access code to unlock these providers.
             </p>
             <p className="text-xs text-gray-500 mb-3 leading-relaxed">
               Need an access code? Contact{' '}
@@ -298,8 +321,9 @@ export const ModelPicker = ({
   // Handle model selection with image model restriction
   const handleModelChange = (newModel: AllModelID) => {
     const isImageModel = imageModels.includes(newModel);
+    const isVideoModel = videoModels.includes(newModel);
 
-    if (isImageModel && !hasImageAccess) {
+    if ((isImageModel || isVideoModel) && !hasImageAccess) {
       // Show popup only if user doesn't have access
       setShowImageModelPopup(true);
       return;
@@ -323,6 +347,7 @@ export const ModelPicker = ({
   const textModels = ALL_MODELS.filter(modelId => MODEL_FEATURES[modelId].type === 'text');
   const visionModels = ALL_MODELS.filter(modelId => MODEL_FEATURES[modelId].type === 'vision');
   const imageModels = ALL_MODELS.filter(modelId => MODEL_FEATURES[modelId].type === 'image');
+  const videoModels = ALL_MODELS.filter(modelId => MODEL_FEATURES[modelId].type === 'video');
 
   const isVisionModel = visionModels.includes(selectedModel);
 
@@ -526,13 +551,47 @@ export const ModelPicker = ({
                       <div className="flex flex-col gap-0 min-w-0 flex-1">
                         <div className="flex items-center gap-1">
                           <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
-                          {/* Yellow King Crown Icon */}
-                          <svg className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 70 L25 30 L40 50 L50 20 L60 50 L75 30 L90 70 Z" />
-                            <rect x="5" y="70" width="90" height="15" />
+                          {/* Yellow Crown Icon */}
+                          <svg className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 6L9 9L5 8L7 12L4 16H20L17 12L19 8L15 9L12 6Z" />
+                            <path d="M6 16H18V18C18 19.1 17.1 20 16 20H8C6.9 20 6 19.1 6 18V16Z" />
+                            <circle cx="12" cy="8" r="1" />
+                            <circle cx="9" cy="10" r="0.5" />
+                            <circle cx="15" cy="10" r="0.5" />
                           </svg>
                           <span className="text-[6px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded-full font-medium flex-shrink-0">
                             IMAGE
+                          </span>
+                        </div>
+                        <span className="text-[8px] text-muted-foreground leading-tight line-clamp-1">
+                          {modelInfo.feature}
+                        </span>
+                      </div>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+
+              {/* Video Generation Models */}
+              {videoModels.map((modelId) => {
+                const modelInfo = MODEL_FEATURES[modelId];
+                return (
+                  <SelectItem key={modelId} value={modelId} className="py-1 cursor-pointer hover:bg-gray-50/50">
+                    <div className="flex items-start gap-1.5 w-full">
+                      <div className="mt-0.5 flex-shrink-0">{modelInfo.icon}</div>
+                      <div className="flex flex-col gap-0 min-w-0 flex-1">
+                        <div className="flex items-center gap-1">
+                          <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
+                          {/* Yellow Crown Icon */}
+                          <svg className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 6L9 9L5 8L7 12L4 16H20L17 12L19 8L15 9L12 6Z" />
+                            <path d="M6 16H18V18C18 19.1 17.1 20 16 20H8C6.9 20 6 19.1 6 18V16Z" />
+                            <circle cx="12" cy="8" r="1" />
+                            <circle cx="9" cy="10" r="0.5" />
+                            <circle cx="15" cy="10" r="0.5" />
+                          </svg>
+                          <span className="text-[6px] bg-purple-100 text-purple-700 px-1 py-0.5 rounded-full font-medium flex-shrink-0">
+                            VIDEO
                           </span>
                         </div>
                         <span className="text-[8px] text-muted-foreground leading-tight line-clamp-1">
