@@ -7,6 +7,7 @@ import equal from "fast-deep-equal";
 import Image from "next/image";
 
 import { Markdown } from "./markdown";
+import { MessageActions, ImageDownload } from "./message-actions";
 import { cn } from "@/lib/utils";
 import {
   CheckCircle,
@@ -183,14 +184,15 @@ const PurePreviewMessage = ({
               // Handle file parts (images)
               if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
                 return (
-                  <div key={`message-${message.id}-file-${i}`} className="mb-2">
+                  <div key={`message-${message.id}-file-${i}`} className="mb-2 group">
                     <Image
                       src={part.url}
-                      alt={`Uploaded image ${i + 1}`}
+                      alt={`Generated image ${i + 1}`}
                       className="max-w-xs max-h-64 object-cover rounded-lg border border-gray-200 shadow-sm"
                       width={300}
                       height={256}
                     />
+                    <ImageDownload imageUrl={part.url} imageIndex={i} />
                   </div>
                 );
               }
@@ -229,6 +231,14 @@ const PurePreviewMessage = ({
                           </>
                         ) : (
                           <Markdown>{part.text}</Markdown>
+                        )}
+                        
+                        {message.role === "assistant" && part.text && (
+                          <MessageActions 
+                            messageContent={part.text}
+                            hasImages={message.parts?.some(p => p.type === 'file' && p.mediaType?.startsWith('image/'))}
+                            isStreaming={isLatestMessage && status === "streaming"}
+                            isGeneratingImage={part.text.includes('Generating image') || part.text.includes('generating')} messageId={""}                          />
                         )}
                       </div>
                     </motion.div>
