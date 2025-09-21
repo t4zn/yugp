@@ -3,13 +3,35 @@ import Link from "next/link";
 import React, { memo } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { CodeBlock } from "./syntax-highlighter";
 
 const components: Partial<Components> = {
-  pre: ({ children }) => (
-    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm whitespace-pre scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal' }}>
-      {children}
-    </pre>
-  ),
+  pre: ({ children }) => {
+    // Extract the code element and its className
+    const codeElement = React.Children.toArray(children).find(
+      (child): child is React.ReactElement<{ className?: string; children: React.ReactNode }> => 
+        React.isValidElement(child) && child.type === 'code'
+    );
+    
+    if (codeElement && codeElement.props.className) {
+      const codeText = typeof codeElement.props.children === 'string' 
+        ? codeElement.props.children 
+        : React.Children.toArray(codeElement.props.children).join('');
+      
+      return (
+        <CodeBlock className={codeElement.props.className}>
+          {codeText}
+        </CodeBlock>
+      );
+    }
+    
+    // Fallback for plain pre without syntax highlighting
+    return (
+      <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm whitespace-pre scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal' }}>
+        {children}
+      </pre>
+    );
+  },
   code: ({ node, className, children, ...props }) => {
     const isInline = !className;
     if (isInline) {
@@ -19,10 +41,15 @@ const components: Partial<Components> = {
         </code>
       );
     }
+    
+    // For block code, use syntax highlighting
+    const codeText = typeof children === 'string' ? children : String(children);
+    const language = className ? className.replace('language-', '') : 'text';
+    
     return (
-      <code className="block overflow-x-auto whitespace-pre" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal' }} {...props}>
-        {children}
-      </code>
+      <CodeBlock className={className || ''}>
+        {codeText}
+      </CodeBlock>
     );
   },
   ol: ({ node, children, ...props }) => {
