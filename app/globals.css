@@ -212,40 +212,6 @@ html, body {
     overflow-wrap: break-word;
     white-space: normal;
   }
-  
-  /* Ensure touch targets are large enough on mobile (opt-in) */
-  .tap-target {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Compact circular icon buttons (mic, send, upload) */
-  .icon-btn {
-    min-width: unset;
-    min-height: unset;
-    width: 36px;
-    height: 36px;
-    padding: 8px; /* matches p-2 */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-  }
-  
-  /* Make file upload button more accessible on mobile */
-  .model-picker button {
-    padding: 8px !important;
-    min-height: 40px;
-    min-width: 40px;
-  }
-  /* But allow compact sized icon buttons explicitly */
-  .model-picker button.icon-btn {
-    min-height: unset !important;
-    min-width: unset !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 8px !important;
-  }
 }
 
 /* Custom Select component styling for grid layout - FIXED FOR MOBILE */
