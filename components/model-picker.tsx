@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { modelID, MODELS } from "@/ai/providers";
-import { useRef, ReactNode } from "react";
+import { useRef, ReactNode, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -122,6 +122,149 @@ interface ModelPickerProps {
   onShowVisionError?: () => void;
 }
 
+// Email notification popup component
+const ImageModelPopup = ({ 
+  isOpen, 
+  onClose, 
+  onAccessGranted 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+  onAccessGranted: () => void;
+}) => {
+  const [code, setCode] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isValidCode, setIsValidCode] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
+    e.preventDefault();
+    if (!code.trim()) return;
+    
+    setIsSubmitting(true);
+    
+    // Check if code is valid
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      if (code.trim() === 'csc12') {
+        setIsValidCode(true);
+        // Auto close after showing success and grant access
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setCode('');
+          setIsValidCode(false);
+          onAccessGranted(); // Grant access instead of just closing
+        }, 2000);
+      } else {
+        setIsValidCode(false);
+        // Auto reset after showing error
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setCode('');
+        }, 2000);
+      }
+    }, 1000);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" onClick={onClose}>
+      <div 
+        className="bg-white/85 backdrop-blur-xl rounded-lg p-4 w-[85%] max-w-xs mx-4 shadow-lg border border-white/25 relative" 
+        style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.90) 100%)',
+          backdropFilter: 'blur(12px) saturate(120%)',
+          WebkitBackdropFilter: 'blur(12px) saturate(120%)',
+          boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 p-1 hover:bg-gray-100/50 rounded-full transition-colors"
+          disabled={isSubmitting}
+        >
+          <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        {!isSubmitted ? (
+          <>
+            <h3 className="text-sm font-semibold text-gray-900 mb-2 pr-6">Premium Feature</h3>
+            <p className="text-xs text-gray-600 mb-2 leading-relaxed">
+              Image generation requires premium access. Subscribe to premium or enter your access code to unlock image providers.
+            </p>
+            <p className="text-xs text-gray-500 mb-3 leading-relaxed">
+              Need an access code? Contact <span className="font-medium text-blue-600">taizun8@gmail.com</span>
+            </p>
+            
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Enter access code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
+                className="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                disabled={isSubmitting}
+              />
+              
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || !code.trim()}
+                  className="px-4 py-1.5 bg-black text-white text-xs rounded-full hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isSubmitting ? 'Verifying...' : 'Verify Code'}
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="text-center">
+            {isValidCode ? (
+              <>
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Access Granted!</h3>
+                <p className="text-xs text-gray-600">
+                  You now have access to image providers.
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Invalid Code</h3>
+                <p className="text-xs text-gray-600">
+                  Please subscribe to premium for access.
+                </p>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const ModelPicker = ({
   selectedModel,
   setSelectedModel,
@@ -129,6 +272,9 @@ export const ModelPicker = ({
   uploadedImage,
   onShowVisionError,
 }: ModelPickerProps) => {
+  const [showImageModelPopup, setShowImageModelPopup] = useState(false);
+  const [previousModel, setPreviousModel] = useState<AllModelID>(selectedModel);
+  const [hasImageAccess, setHasImageAccess] = useState(false);
   // Single title component that changes alignment based on screen size
   const SectionTitle = ({ children }: { children: ReactNode }) => (
     <div className="w-full px-1 py-0.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wide border-b border-gray-200/50 mb-1 text-left sm:text-center">
@@ -137,6 +283,33 @@ export const ModelPicker = ({
   );
   const selectedModelInfo = MODEL_FEATURES[selectedModel];
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Handle model selection with image model restriction
+  const handleModelChange = (newModel: AllModelID) => {
+    const isImageModel = imageModels.includes(newModel);
+    
+    if (isImageModel && !hasImageAccess) {
+      // Show popup only if user doesn't have access
+      setShowImageModelPopup(true);
+      return;
+    }
+    
+    // Update previous model before changing
+    setPreviousModel(selectedModel);
+    setSelectedModel(newModel);
+  };
+  
+  // Handle popup close - revert to previous model
+  const handlePopupClose = () => {
+    setShowImageModelPopup(false);
+    // No need to revert model since we never changed it
+  };
+  
+  // Handle successful access code verification
+  const handleAccessGranted = () => {
+    setHasImageAccess(true);
+    setShowImageModelPopup(false);
+  };
   
   // Separate models by type
   const textModels = ALL_MODELS.filter(modelId => MODEL_FEATURES[modelId].type === 'text');
@@ -279,7 +452,7 @@ export const ModelPicker = ({
         )}
       </div>
       
-      <Select value={selectedModel} onValueChange={setSelectedModel}>
+      <Select value={selectedModel} onValueChange={handleModelChange}>
         <SelectTrigger className="min-w-[100px] sm:min-w-[140px] h-6 sm:h-8 text-xs">
           <SelectValue placeholder="Select a model">
             <div className="flex items-center gap-1 sm:gap-1.5">
@@ -347,6 +520,10 @@ export const ModelPicker = ({
                       <div className="flex flex-col gap-0 min-w-0 flex-1">
                         <div className="flex items-center gap-1">
                           <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
+                          {/* Yellow King Crown Icon */}
+                          <svg className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 16L3 10l5.5 3L12 4l3.5 9L21 10l-2 6H5zm2.7-2h8.6l.9-2.4L14 13l-2-5.5L10 13l-3.2-1.4L7.7 14z"/>
+                          </svg>
                           <span className="text-[6px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded-full font-medium flex-shrink-0">
                             IMAGE
                           </span>
@@ -363,6 +540,13 @@ export const ModelPicker = ({
           </div>
         </SelectContent>
       </Select>
+      
+      {/* Image Model Restriction Popup */}
+      <ImageModelPopup 
+        isOpen={showImageModelPopup} 
+        onClose={handlePopupClose}
+        onAccessGranted={handleAccessGranted}
+      />
     </div>
   );
 };
