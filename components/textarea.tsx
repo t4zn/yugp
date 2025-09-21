@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 // Add image generation models to the existing types
-type AllModelID = modelID | 'dalle-mini' | 'flux';
+type AllModelID = modelID | 'flux' | 'dalle-mini' | 'veo-3' | 'heygen';
 
 interface InputProps {
   input: string;
