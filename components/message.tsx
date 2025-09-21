@@ -159,7 +159,7 @@ const PurePreviewMessage = ({
   return (
     <AnimatePresence key={message.id}>
       <motion.div
-        className="w-full mx-auto px-4 group/message"
+        className="w-full mx-auto px-4 group/message overflow-hidden"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         key={`message-${message.id}`}
@@ -167,7 +167,7 @@ const PurePreviewMessage = ({
       >
         <div
           className={cn(
-            "flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl",
+            "flex gap-4 w-full overflow-hidden group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl",
             "group-data-[role=user]/message:w-fit",
           )}
         >
@@ -179,7 +179,7 @@ const PurePreviewMessage = ({
             </div>
           )}
 
-          <div className="flex flex-col w-full space-y-4">
+          <div className="flex flex-col w-full space-y-4 min-w-0 overflow-hidden">
             {message.parts?.map((part, i) => {
               // Handle file parts (images)
               if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
@@ -204,10 +204,10 @@ const PurePreviewMessage = ({
                       initial={{ y: 5, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       key={`message-${message.id}-part-${i}`}
-                      className="flex flex-row gap-2 items-start w-full pb-4"
+                      className="flex flex-row gap-2 items-start w-full pb-4 overflow-hidden"
                     >
                       <div
-                        className={cn("flex flex-col gap-4", {
+                        className={cn("flex flex-col gap-4 min-w-0", {
                           "bg-white/60 backdrop-blur-sm text-black px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-br-xl shadow-lg":
                             message.role === "user",
                           "bg-gray-800/80 backdrop-blur-lg text-gray-300 px-3 py-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl shadow-lg":
