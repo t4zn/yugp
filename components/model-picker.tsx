@@ -102,23 +102,16 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     type: "image",
     icon: (
       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="fluxGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#ff4081" />
-            <stop offset="50%" stopColor="#9c27b0" />
-            <stop offset="100%" stopColor="#3f51b5" />
-          </linearGradient>
-        </defs>
         <path 
           d="M3 12L9 6L15 12L21 6M3 18L9 12L15 18L21 12" 
-          stroke="url(#fluxGradient)" 
+          stroke="#000000" 
           strokeWidth="2.5" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         />
-        <circle cx="6" cy="9" r="1.5" fill="url(#fluxGradient)" />
-        <circle cx="12" cy="15" r="1.5" fill="url(#fluxGradient)" />
-        <circle cx="18" cy="9" r="1.5" fill="url(#fluxGradient)" />
+        <circle cx="6" cy="9" r="1.5" fill="#000000" />
+        <circle cx="12" cy="15" r="1.5" fill="#000000" />
+        <circle cx="18" cy="9" r="1.5" fill="#000000" />
       </svg>
     )
   },
@@ -145,26 +138,19 @@ const MODEL_FEATURES: Record<AllModelID, { name: string; feature: string; icon: 
     type: "video",
     icon: (
       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="heygenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00d4ff" />
-            <stop offset="50%" stopColor="#5b73ff" />
-            <stop offset="100%" stopColor="#000dff" />
-          </linearGradient>
-        </defs>
         {/* Avatar head */}
-        <circle cx="12" cy="8" r="3" fill="url(#heygenGradient)" />
+        <circle cx="12" cy="8" r="3" fill="#000000" />
         {/* Video camera body */}
-        <rect x="6" y="12" width="8" height="5" rx="1" fill="url(#heygenGradient)" />
+        <rect x="6" y="12" width="8" height="5" rx="1" fill="#000000" />
         {/* Camera lens */}
         <circle cx="10" cy="14.5" r="1.5" fill="white" />
-        <circle cx="10" cy="14.5" r="0.8" fill="url(#heygenGradient)" />
+        <circle cx="10" cy="14.5" r="0.8" fill="#000000" />
         {/* Recording indicator */}
         <circle cx="16" cy="13" r="1" fill="#ff4444" />
         {/* Speech lines */}
-        <path d="M15 8.5L17 7.5M15 9.5L18 8.5M15 10.5L17 9.5" stroke="url(#heygenGradient)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M15 8.5L17 7.5M15 9.5L18 8.5M15 10.5L17 9.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
         {/* Tripod legs */}
-        <path d="M8 17L6 20M12 17V20M16 17L18 20" stroke="url(#heygenGradient)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M8 17L6 20M12 17V20M16 17L18 20" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     )
   }
