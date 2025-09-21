@@ -313,7 +313,7 @@ export const ModelPicker = ({
 
             {/* Vision Models Section */}
             <div className="space-y-1">
-              <SectionTitle>Vision & Image</SectionTitle>
+              <SectionTitle>Vision & Media</SectionTitle>
               {/* Vision Models */}
               {visionModels.map((modelId) => {
                 const modelInfo = MODEL_FEATURES[modelId];
