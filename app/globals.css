@@ -180,6 +180,84 @@ html, body {
   overscroll-behavior: contain;
 }
 
+/* Table and code block scrolling improvements */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 #1f2937;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Code block specific improvements */
+.markdown-content pre,
+.markdown-content div[class*="language-"] {
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  word-wrap: normal !important;
+  max-width: 100%;
+}
+
+.markdown-content code {
+  white-space: pre !important;
+  word-break: keep-all !important;
+  word-wrap: normal !important;
+}
+
+/* Table specific improvements */
+.markdown-content table {
+  border-spacing: 0;
+  width: auto;
+  min-width: max-content;
+}
+
+.markdown-content th,
+.markdown-content td {
+  white-space: nowrap;
+  word-break: keep-all;
+  word-wrap: normal;
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.markdown-content th {
+  background-color: rgba(31, 41, 55, 0.8);
+  font-weight: 600;
+}
+
+.markdown-content tr:hover {
+  background-color: rgba(31, 41, 55, 0.4);
+}
+
+/* Mobile table scrolling */
+@media (max-width: 768px) {
+  .markdown-content table {
+    font-size: 14px;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    padding: 8px 12px;
+    min-width: 80px;
+  }
+}
+
 /* Mobile-specific message container */
 @media (max-width: 768px) {
   .markdown-content {
