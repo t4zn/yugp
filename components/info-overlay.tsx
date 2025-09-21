@@ -432,7 +432,7 @@ Thank you!`
                     {/* Additional Contact Info */}
                     <div className="pt-2">
                       <p className="text-xs text-gray-600 text-center leading-tight">
-                        You'll receive a reply within 24 hours
+                        You will receive a reply within 24 hours
                       </p>
                     </div>
                   </div>
