@@ -137,6 +137,50 @@ const components: Partial<Components> = {
       </h6>
     );
   },
+  table: ({ node, children, ...props }) => {
+    return (
+      <div className="w-full min-w-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 my-4">
+        <table className="min-w-full border-collapse" {...props}>
+          {children}
+        </table>
+      </div>
+    );
+  },
+  thead: ({ node, children, ...props }) => {
+    return (
+      <thead className="bg-gray-800/50" {...props}>
+        {children}
+      </thead>
+    );
+  },
+  tbody: ({ node, children, ...props }) => {
+    return (
+      <tbody {...props}>
+        {children}
+      </tbody>
+    );
+  },
+  tr: ({ node, children, ...props }) => {
+    return (
+      <tr className="border-b border-gray-700/50 hover:bg-gray-800/30" {...props}>
+        {children}
+      </tr>
+    );
+  },
+  th: ({ node, children, ...props }) => {
+    return (
+      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-200 whitespace-nowrap" {...props}>
+        {children}
+      </th>
+    );
+  },
+  td: ({ node, children, ...props }) => {
+    return (
+      <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap" {...props}>
+        {children}
+      </td>
+    );
+  },
 };
 
 const remarkPlugins = [remarkGfm];
