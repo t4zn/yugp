@@ -191,12 +191,28 @@ const ImageModelPopup = ({
 
         {!isSubmitted ? (
           <>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2 pr-6">Premium Feature</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-2 pr-6 flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-yellow-400 flex-shrink-0" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 70 L25 30 L40 50 L50 20 L60 50 L75 30 L90 70 Z" />
+                <rect x="5" y="70" width="90" height="15" />
+              </svg>
+              Premium Feature
+            </h3>
             <p className="text-xs text-gray-600 mb-2 leading-relaxed">
               Image generation requires premium access. Subscribe to premium or enter your access code to unlock image providers.
             </p>
             <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-              Need an access code? Contact <span className="font-medium text-blue-600">taizun8@gmail.com</span>
+              Need an access code? Contact{' '}
+              <a
+                href="mailto:taizun8@gmail.com?subject=Premium Access Code Request"
+                className="font-bold text-black hover:underline cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=taizun8@gmail.com&su=Premium%20Access%20Code%20Request', '_blank');
+                }}
+              >
+                taizun8@gmail.com
+              </a>
             </p>
 
             <div className="space-y-3">
@@ -511,8 +527,9 @@ export const ModelPicker = ({
                         <div className="flex items-center gap-1">
                           <span className="font-medium text-[9px] truncate">{modelInfo.name}</span>
                           {/* Yellow King Crown Icon */}
-                          <svg className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 16L3 10l5.5 3L12 4l3.5 9L21 10l-2 6H5zm2.7-2h8.6l.9-2.4L14 13l-2-5.5L10 13l-3.2-1.4L7.7 14z" />
+                          <svg className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 70 L25 30 L40 50 L50 20 L60 50 L75 30 L90 70 Z" />
+                            <rect x="5" y="70" width="90" height="15" />
                           </svg>
                           <span className="text-[6px] bg-blue-100 text-blue-700 px-1 py-0.5 rounded-full font-medium flex-shrink-0">
                             IMAGE
