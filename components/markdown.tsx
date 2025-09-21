@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 
 const components: Partial<Components> = {
   pre: ({ children }) => (
-    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm max-w-full">
+    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm whitespace-pre scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal' }}>
       {children}
     </pre>
   ),
@@ -14,13 +14,13 @@ const components: Partial<Components> = {
     const isInline = !className;
     if (isInline) {
       return (
-        <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm font-mono break-words" {...props}>
+        <code className="text-white font-bold font-mono break-words" {...props}>
           {children}
         </code>
       );
     }
     return (
-      <code className="block overflow-x-auto max-w-full whitespace-pre-wrap break-words" {...props}>
+      <code className="block overflow-x-auto whitespace-pre" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal' }} {...props}>
         {children}
       </code>
     );
@@ -114,7 +114,7 @@ const remarkPlugins = [remarkGfm];
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
-    <div className="markdown-content max-w-full overflow-hidden">
+    <div className="markdown-content w-full overflow-hidden">
       <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
         {children}
       </ReactMarkdown>
