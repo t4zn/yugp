@@ -27,9 +27,11 @@ const components: Partial<Components> = {
     
     // Fallback for plain pre without syntax highlighting
     return (
-      <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm whitespace-pre scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal' }}>
-        {children}
-      </pre>
+      <div className="w-full min-w-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm whitespace-pre" style={{ whiteSpace: 'pre', wordBreak: 'keep-all', wordWrap: 'normal', minWidth: 'max-content' }}>
+          {children}
+        </pre>
+      </div>
     );
   },
   code: ({ node, className, children, ...props }) => {
@@ -141,7 +143,7 @@ const remarkPlugins = [remarkGfm];
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
-    <div className="markdown-content w-full overflow-hidden">
+    <div className="markdown-content w-full min-w-0">
       <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
         {children}
       </ReactMarkdown>
