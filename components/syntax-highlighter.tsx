@@ -132,30 +132,31 @@ export function CodeBlock({ children, className = '' }: CodeBlockProps) {
   }
   
   return (
-    <SyntaxHighlighter
-      language={language}
-      style={vscodeTheme}
-      customStyle={{
-        margin: 0,
-        padding: 0,
-        border: 'none',
-        borderRadius: 0,
-        fontSize: '14px',
-        lineHeight: '1.5',
-        fontFamily: '"Fira Code", "JetBrains Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
-        background: 'transparent',
-        color: '#d4d4d4',
-        overflowX: 'auto',
-        whiteSpace: 'pre',
-        wordBreak: 'keep-all',
-        wordWrap: 'normal'
-      }}
-      wrapLines={false}
-      wrapLongLines={false}
-      showLineNumbers={false}
-      className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
-    >
-      {children}
-    </SyntaxHighlighter>
+    <div className="w-full min-w-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800" style={{ whiteSpace: 'nowrap' }}>
+      <SyntaxHighlighter
+        language={language}
+        style={vscodeTheme}
+        customStyle={{
+          margin: 0,
+          padding: '12px 16px',
+          border: 'none',
+          borderRadius: 0,
+          fontSize: '14px',
+          lineHeight: '1.5',
+          fontFamily: '"Fira Code", "JetBrains Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
+          background: '#1a1a1a',
+          color: '#d4d4d4',
+          whiteSpace: 'pre',
+          wordBreak: 'keep-all',
+          wordWrap: 'normal',
+          overflow: 'visible'
+        }}
+        wrapLines={false}
+        wrapLongLines={false}
+        showLineNumbers={false}
+      >
+        {children}
+      </SyntaxHighlighter>
+    </div>
   );
 }
