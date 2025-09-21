@@ -4,7 +4,11 @@ import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 // VS Code Dark+ theme colors (Monaco-like)
-const vscodeTheme: any = {
+type SyntaxHighlighterTheme = {
+  [key: string]: React.CSSProperties;
+};
+
+const vscodeTheme: SyntaxHighlighterTheme = {
   'code[class*="language-"]': {
     color: '#d4d4d4',
     fontSize: '14px',
