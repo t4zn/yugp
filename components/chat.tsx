@@ -12,7 +12,7 @@ import { QueueErrorToast } from "./queue-error-toast";
 import { toast } from "sonner";
 
 // Add image generation models to the existing types
-type AllModelID = modelID | 'dalle-mini' | 'flux';
+type AllModelID = modelID | 'flux' | 'dalle-mini' | 'veo-3' | 'heygen';
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -31,13 +31,14 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   const isImageModel = ['dalle-mini', 'flux'].includes(selectedModel);
+  const isVideoModel = ['veo-3', 'heygen'].includes(selectedModel);
   const isVisionModel = ['meta-llama/llama-4-maverick-17b-128e-instruct', 'meta-llama/llama-4-scout-17b-16e-instruct'].includes(selectedModel);
 
   const handleImageUpload = (imageData: string, fileName: string) => {
     setUploadedImage({ data: imageData, name: fileName });
     
     // Auto-switch to a vision model if current model doesn't support vision
-    if (!isVisionModel && !isImageModel) {
+    if (!isVisionModel && !isImageModel && !isVideoModel) {
       setSelectedModel('meta-llama/llama-4-maverick-17b-128e-instruct'); // Default to Maverick for vision
       toast.success(
         "Switched to Llama 4 Maverick for image analysis",
@@ -200,6 +201,11 @@ export default function Chat() {
               "A peaceful mountain landscape at sunset",
               "A colorful abstract painting",
               "A robot reading a book in a library",
+            ] : isVideoModel ? [
+              "A person walking down a city street",
+              "Ocean waves crashing on a beach",
+              "A time-lapse of clouds moving across the sky",
+              "A butterfly landing on a flower",
             ] : [
               "What are the advantages of using Next.js?",
               "Write code to demonstrate Dijkstra's algorithm",
@@ -225,8 +231,8 @@ export default function Chat() {
             e.preventDefault();
             if (!input.trim() && !uploadedImage) return;
             
-            // Handle image generation models
-            if (isImageModel && input.trim()) {
+            // Handle image and video generation models
+            if ((isImageModel || isVideoModel) && input.trim()) {
               const inputValue = input.trim();
               setInput(""); // Clear input immediately
               await handleImageGeneration(inputValue, selectedModel);
@@ -234,7 +240,7 @@ export default function Chat() {
             }
             
             // Handle text/vision models
-            if (!isImageModel) {
+            if (!isImageModel && !isVideoModel) {
               // Create message parts array
               const parts: { type: 'text' | 'file'; text?: string; mediaType?: string; url?: string }[] = [];
               
