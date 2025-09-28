@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
 import Image from 'next/image';
@@ -24,7 +24,7 @@ export default function InfoOverlay() {
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="text-black group-hover:text-gray-700 transition-colors"
+          className="text-black dark:text-white group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors"
         >
           <circle
             cx="12"
@@ -108,8 +108,8 @@ export default function InfoOverlay() {
                   onClick={() => setActiveSection('about')}
                   className={`px-2 py-1 text-xs transition-colors relative ${
                     activeSection === 'about'
-                      ? 'text-black font-medium'
-                      : 'text-gray-600 hover:text-gray-700'
+                      ? 'text-black dark:text-white font-medium'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   About
@@ -121,8 +121,8 @@ export default function InfoOverlay() {
                   onClick={() => setActiveSection('pricing')}
                   className={`px-2 py-1 text-xs transition-colors relative ${
                     activeSection === 'pricing'
-                      ? 'text-black font-medium'
-                      : 'text-gray-600 hover:text-gray-700'
+                      ? 'text-black dark:text-white font-medium'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   Pricing
@@ -134,8 +134,8 @@ export default function InfoOverlay() {
                   onClick={() => setActiveSection('contact')}
                   className={`px-2 py-1 text-xs transition-colors relative ${
                     activeSection === 'contact'
-                      ? 'text-black font-medium'
-                      : 'text-gray-600 hover:text-gray-700'
+                      ? 'text-black dark:text-white font-medium'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   Contact
@@ -168,13 +168,13 @@ export default function InfoOverlay() {
 
                     {/* Name and Title */}
                     <div className="flex-1">
-                      <h3 className="text-sm font-bold text-gray-800 mb-0.5">Taizun</h3>
-                      <p className="text-xs text-gray-600 font-medium">AI Developer</p>
+                      <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-0.5">Taizun</h3>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">AI Developer</p>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <div className="space-y-1.5 text-gray-700">
+                  <div className="space-y-1.5 text-gray-700 dark:text-gray-300">
                     <p className="text-xs leading-tight">
                       I am a BTech CSE 2nd Year Student at Medicaps University, Indore.
                     </p>
@@ -202,7 +202,7 @@ export default function InfoOverlay() {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-gray-600 group-hover:text-blue-600 transition-colors"
+                        className="text-gray-600 dark:text-white group-hover:text-blue-600 transition-colors"
                       >
                         <path
                           d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
@@ -247,7 +247,7 @@ export default function InfoOverlay() {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-gray-600 group-hover:text-gray-800 transition-colors"
+                        className="text-gray-600 dark:text-white group-hover:text-gray-800 transition-colors"
                       >
                         <path
                           d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
@@ -273,7 +273,7 @@ export default function InfoOverlay() {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-gray-600 group-hover:text-orange-500 transition-colors"
+                        className="text-gray-600 dark:text-white group-hover:text-orange-500 transition-colors"
                       >
                         <path
                           d="M22 14.355c0-.742-.564-1.346-1.26-1.346H10.676c-.696 0-1.26.604-1.26 1.346s.563 1.346 1.26 1.346H20.74c.696.001 1.26-.603 1.26-1.346z"
@@ -304,7 +304,7 @@ export default function InfoOverlay() {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-gray-600 group-hover:text-orange-600 transition-colors"
+                        className="text-gray-600 dark:text-white group-hover:text-orange-600 transition-colors"
                       >
                         <circle cx="12" cy="12" r="12" fill="currentColor" />
                         <path
@@ -314,24 +314,6 @@ export default function InfoOverlay() {
                       </svg>
                     </a>
 
-                    {/* Drapels */}
-                    <a
-                      href="https://drapels.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 hover:bg-white/20 rounded-full transition-colors group"
-                      aria-label="Drapels Website"
-                    >
-                      <div className="w-3.5 h-3.5 relative">
-                        <Image
-                          src="/drapels.PNG"
-                          alt="Drapels Logo"
-                          width={14}
-                          height={14}
-                          className="object-contain group-hover:scale-110 transition-transform"
-                        />
-                      </div>
-                    </a>
                   </div>
                 </div>
               )}
@@ -340,37 +322,37 @@ export default function InfoOverlay() {
               {activeSection === 'pricing' && (
                 <div className="space-y-3">
                   <div className="text-center">
-                    <h3 className="text-sm font-bold text-gray-800 mb-2">Pricing Plans</h3>
+                    <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-2">Pricing Plans</h3>
                   </div>
                   <div className="space-y-1.5">
                     <div className="p-2 bg-white/10 rounded border border-white/20">
                       <div className="flex justify-between items-center mb-1">
-                        <h4 className="text-xs font-semibold text-gray-800">Starter</h4>
-                        <span className="text-xs font-bold text-gray-800">$14.99</span>
+                        <h4 className="text-xs font-semibold text-gray-800 dark:text-gray-200">Starter</h4>
+                        <span className="text-xs font-bold text-gray-800 dark:text-gray-200">$14.99</span>
                       </div>
-                      <div className="text-xs text-gray-700 space-y-0.5">
-                        <div>350 images</div>
-                        <div>5 videos</div>
+                      <div className="text-xs text-gray-700 dark:text-gray-300 space-y-0.5">
+                        <div>50 quiz generations</div>
+                        <div>10 PDF uploads</div>
                       </div>
                     </div>
                     <div className="p-2 bg-white/15 rounded border border-white/30">
                       <div className="flex justify-between items-center mb-1">
-                        <h4 className="text-xs font-semibold text-gray-800">Professional</h4>
-                        <span className="text-xs font-bold text-gray-800">$24.99</span>
+                        <h4 className="text-xs font-semibold text-gray-800 dark:text-gray-200">Professional</h4>
+                        <span className="text-xs font-bold text-gray-800 dark:text-gray-200">$24.99</span>
                       </div>
-                      <div className="text-xs text-gray-700 space-y-0.5">
-                        <div>650 images</div>
-                        <div>10 videos</div>
+                      <div className="text-xs text-gray-700 dark:text-gray-300 space-y-0.5">
+                        <div>150 quiz generations</div>
+                        <div>30 PDF uploads</div>
                       </div>
                     </div>
                     <div className="p-2 bg-white/20 rounded border border-white/40">
                       <div className="flex justify-between items-center mb-1">
-                        <h4 className="text-xs font-semibold text-gray-800">Enterprise</h4>
-                        <span className="text-xs font-bold text-gray-800">$59.99</span>
+                        <h4 className="text-xs font-semibold text-gray-800 dark:text-gray-200">Enterprise</h4>
+                        <span className="text-xs font-bold text-gray-800 dark:text-gray-200">$59.99</span>
                       </div>
-                      <div className="text-xs text-gray-700 space-y-0.5">
-                        <div>1,500 images</div>
-                        <div>25 videos</div>
+                      <div className="text-xs text-gray-700 dark:text-gray-300 space-y-0.5">
+                        <div>500 quiz generations</div>
+                        <div>100 PDF uploads</div>
                       </div>
                     </div>
                   </div>
@@ -381,24 +363,24 @@ export default function InfoOverlay() {
               {activeSection === 'contact' && (
                 <div className="space-y-3">
                   <div className="text-center">
-                    <h3 className="text-sm font-bold text-gray-800 mb-2">Contact</h3>
+                    <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-2">Contact</h3>
                   </div>
-                  <div className="space-y-2 text-gray-700">
+                  <div className="space-y-2 text-gray-700 dark:text-gray-300">
                     <p className="text-xs text-center leading-tight">
                       Ready to upgrade? Contact me to purchase your premium subscription!
                     </p>
                     
                     {/* Plan Selection */}
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-gray-700">Select Plan:</label>
+                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Select Plan:</label>
                       <select 
                         id="planSelect"
-                        className="w-full text-xs p-1.5 bg-transparent border-none outline-none text-gray-800 focus:outline-none"
+                        className="w-full text-xs p-1.5 bg-transparent border-none outline-none text-gray-800 dark:text-gray-200 focus:outline-none"
                         defaultValue="starter"
                       >
-                        <option value="starter">Starter - $14.99</option>
-                        <option value="professional">Professional - $24.99</option>
-                        <option value="enterprise">Enterprise - $59.99</option>
+                        <option value="starter">Starter - $14.99 (50 quizzes, 10 PDFs)</option>
+                        <option value="professional">Professional - $24.99 (150 quizzes, 30 PDFs)</option>
+                        <option value="enterprise">Enterprise - $59.99 (500 quizzes, 100 PDFs)</option>
                       </select>
                     </div>
 
@@ -420,10 +402,10 @@ Please let me know the next steps for payment and activation.
 
 Thank you!`
                           );
-                          const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=taizun8@gmail.com&su=${subject}&body=${body}`;
+                          const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=taizun8@gmail.com&su=${subject}&body=${body}` ;
                           window.open(mailtoUrl, '_blank');
                         }}
-                        className="bg-black hover:bg-gray-800 border border-black rounded-full px-4 py-1 text-xs font-medium text-white transition-colors flex items-center justify-center"
+                        className="bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 border border-black dark:border-white rounded-full px-4 py-1 text-xs font-medium text-white dark:text-black transition-colors flex items-center justify-center"
                       >
                         <span>Contact</span>
                       </button>
@@ -431,7 +413,7 @@ Thank you!`
 
                     {/* Additional Contact Info */}
                     <div className="pt-2">
-                      <p className="text-xs text-gray-600 text-center leading-tight">
+                      <p className="text-xs text-gray-600 dark:text-gray-300 text-center leading-tight">
                         You will receive a reply within 24 hours
                       </p>
                     </div>
