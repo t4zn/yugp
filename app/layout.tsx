@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Taizun AI",
-  description: "Advanced AI assistant powered by Taizun"
+  title: "YUG AI",
+  description: "Advanced AI assistant powered by YUG AI"
 };
 
 export const viewport = {
