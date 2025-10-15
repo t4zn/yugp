@@ -216,7 +216,7 @@ export default function Chat() {
                 key={text}
                 type="button"
                 onClick={() => setInput(text)}
-                className="w-full rounded-full border border-white text-black bg-white hover:bg-gray-100 hover:text-gray-900 px-4 py-2 text-sm transition-colors text-left shadow-lg"
+                className="w-full rounded-full border border-white/20 text-white bg-white/10 backdrop-blur-md hover:bg-white/20 hover:text-white px-4 py-2 text-sm transition-colors text-left shadow-lg"
               >
                 {text}
               </button>

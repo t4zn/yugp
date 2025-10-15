@@ -1,7 +1,6 @@
 import Chat from "@/components/chat";
 import dynamic from 'next/dynamic';
 import { InteractionLayer } from '@/components/InteractionLayer';
-import InfoOverlay from '@/components/info-overlay';
 
 // Dynamically import to avoid SSR issues
 const SplineRobot = dynamic(() => import('@/components/SplineRobot'), {
@@ -27,9 +26,6 @@ export default function Page() {
       <InteractionLayer>
         <Chat />
       </InteractionLayer>
-
-      {/* Info Overlay */}
-      <InfoOverlay />
     </div>
   );
 }
